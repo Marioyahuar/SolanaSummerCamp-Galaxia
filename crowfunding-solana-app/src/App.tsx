@@ -1,9 +1,8 @@
 import React from 'react';
 import logo from './logo.svg';
-import './App.css';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { ThemeProvider } from '@emotion/react';
-import { theme } from './assets/css/theme';
+import { darkTheme, theme } from './assets/css/theme';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import Explore from './pages/Explore';
@@ -12,9 +11,11 @@ import Landing from './pages/Landing';
 
 function App() {
   return (
-    <ThemeProvider theme={theme}>
-      <BrowserRouter>
+    <BrowserRouter>
+      <ThemeProvider theme={darkTheme}>
         <Header/>
+      </ThemeProvider>
+      <ThemeProvider theme={theme}>
         <main>
           <Routes>
             <Route path="/" element={< Landing />} />
@@ -23,9 +24,11 @@ function App() {
             <Route path="/:id" element={< Project />} />
           </Routes>
         </main>
+      </ThemeProvider>
+      <ThemeProvider theme={darkTheme}>
         <Footer />
-      </BrowserRouter>
-    </ThemeProvider>
+      </ThemeProvider>
+    </BrowserRouter>
   );
 }
 

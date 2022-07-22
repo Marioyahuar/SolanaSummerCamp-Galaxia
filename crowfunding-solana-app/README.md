@@ -9,6 +9,10 @@
   * yarn add @mui/material
 * MUI material icons:
   * yarn add @mui/icons-material
+* Fontawesome :
+  * yarn add @fortawesome/fontawesome-svg-core
+  * yarn add @fortawesome/free-brands-svg-icons
+  * yarn add @fortawesome/react-fontawesome@latest
 * Moment js:
   * yarn add moment
 

@@ -15,39 +15,43 @@ function a11yProps(index: number) {
 
 function Header() {
   
-    const location = useLocation();
-    // console.log(location.pathname);
-    const currpage = location.pathname === '/explore'? 0
-                  : location.pathname === '/sponsoring' ? 1 : false;
+  const location = useLocation();
+  // console.log(location.pathname);
+  const currpage = location.pathname === '/explore'? 0
+                : location.pathname === '/sponsoring' ? 1 : false;
   
   const [isLogged, setIsLogged] = React.useState(false);
-  // const handleChange = (event: React.SyntheticEvent, newValue: boolean) => {
-  //   setValue(newValue);
-  // };
+  const handleLogin = (event: React.SyntheticEvent) => {
+    setIsLogged(true);
+  };
+  const handleLogout = (event: React.SyntheticEvent) => {
+    setIsLogged(false);
+  }
   let wallet = 'Pepito';
 
   return (
-    <header>
-      <img src="" alt="logo" />
+    <header className='row dark-mode'>
+      <img src="logo.svg" alt="logo" />
       <Tabs  value={currpage} aria-label="nav" className="f-row">
-        <Tab label="Explore" {...a11yProps(0)}    href="#" />
+        <Tab label="Explore" {...a11yProps(0)}    href="/explore" />
         { isLogged ?
-          <Tab label="Sponsoring" {...a11yProps(1)} href="#" />
+          <Tab label="Sponsoring" {...a11yProps(1)} href="/sponsoring" />
           : ''
         }
       </Tabs>
       {
-      isLogged?
-      <Button variant="contained"
-        startIcon={<LoginIcon />}>
-        Connect Wallet
-      </Button>
-      : 
+      isLogged ?
       <Chip
         label={wallet}
-        // onDelete={handleDelete}
+        onDelete={handleLogout}
         deleteIcon={<LogoutIcon />}
       />
+      :
+      <Button variant="contained"
+        onClick={handleLogin}
+        startIcon={<LoginIcon />}>
+        Connect Wallet
+      </Button> 
       }
     </header>
   )

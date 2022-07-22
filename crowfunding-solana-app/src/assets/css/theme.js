@@ -1,68 +1,114 @@
 import { createTheme } from '@mui/material/styles';
 
+const commonFonts = [
+  '-apple-system',
+  'BlinkMacSystemFont',
+  '"Segoe UI"',
+  'Roboto',
+  '"Helvetica Neue"',
+  'Arial',
+  'sans-serif',
+  '"Apple Color Emoji"',
+  '"Segoe UI Emoji"',
+  '"Segoe UI Symbol"',
+].join(',');
+
+const typography = {
+  fontFamily: 'Nunito, ' + commonFonts,
+  fontSize: 14,
+  h1: {
+    fontFamily: 'Poppins, Nunito, ' + commonFonts,
+    fontSize: '2em',
+    fontWeight: 700,
+  },
+  h2: {
+    fontFamily: 'Poppins, Nunito, ' + commonFonts,
+    fontSize: '1.75em',
+    fontWeight: 700,
+  },
+  h3: {
+    fontFamily: 'Poppins, Nunito, ' + commonFonts,
+    fontSize: '1.5em',
+    fontWeight: 700,
+  },
+  h4: {
+    fontFamily: 'Poppins, Nunito, ' + commonFonts,
+    fontSize: '1.25em',
+    fontWeight: 700,
+  },
+  h5: {
+    fontFamily: 'Poppins, Nunito, ' + commonFonts,
+    fontSize: '1em',
+    fontWeight: 700,
+  },
+  subtitle1: { fontSize: 14, },
+  subtitle2: { fontSize: 12, },
+  button: {
+    fontWeight: 900,
+  },
+};
+
+
+const lightPalette = {
+  mode: 'light',
+  primary: {
+    main: '#18ED98',
+    light: '#64FAB2',
+    dark: '#00C087',
+    contrastText: '#2A2843',
+  },
+  secondary: {
+    main: '#AA68FE',
+    light: '#CC78FF',
+    dark: '#875AE4',
+    contrastText: '#EFF1F4',
+  },
+  text: {
+    primary: '#4D4A75',
+    secondary: '#4D4A75AA',
+    disabled: '#A2AFC5',
+    icon: '#4D4A75',
+  },
+  divider: '#4D4A7580',
+  background: {
+    paper: '#EFF1F4',
+    default: '#F9F9FB',
+  }
+}
+
+const darkPalette = {
+  mode: 'dark',
+  primary: {
+    main: '#18ED98',
+    light: '#64FAB2',
+    dark: '#00C087',
+    contrastText: '#2A2843',
+  },
+  secondary: {
+    main: '#AA68FE',
+    light: '#CC78FF',
+    dark: '#875AE4',
+    contrastText: '#EFF1F4',
+  },
+  text: {
+    primary: '#D6DDE8',
+    secondary: '#D6DDE8AA',
+    disabled: '#697A95',
+    icon: '#D6DDE8',
+  },
+  divider: '#D6DDE880',
+  background: {
+    paper: '#2A2843',
+    default: '#1E1C35',
+  }
+}
+
+
 export const theme = createTheme({
-  palette: {
-    mode: 'dark',
-    primary: {
-      main: '#89D87A',
-      light: '#B9DF79',
-      dark: '#62BF7B',
-      contrastText: '#16202A',
-    },
-    secondary: {
-      main: '#89D87A',
-      light: '#B9DF79',
-      dark: '#62BF7B',
-      contrastText: '#16202A',
-    },
-    text: {
-      primary: '#F3EDE6',
-      secondary: '#848688',
-      disabled: '#84868880',
-      icon: '#F3EDE6',
-    },
-    divider: '#848688',
-    background: {
-      paper: '#1F2732',
-      default: '#16202A',
-    }
-  },
-  typography: {
-    fontFamily: [
-      'Jost',
-      '-apple-system',
-      'BlinkMacSystemFont',
-      '"Segoe UI"',
-      'Roboto',
-      '"Helvetica Neue"',
-      'Arial',
-      'sans-serif',
-      '"Apple Color Emoji"',
-      '"Segoe UI Emoji"',
-      '"Segoe UI Symbol"',
-    ].join(','),
-    fontSize: 14,
-    h1: {
-      fontSize: '2em',
-      fontWeight: 800,
-    },
-    h2: {
-      fontSize: '1.75em',
-      fontWeight: 800,
-    },
-    h3: {
-      fontSize: '1.5em',
-      fontWeight: 600,
-    },
-    h4: {
-      fontSize: '1.25em',
-      fontWeight: 600,
-    },
-    h5: {
-      fontSize: '1em',
-      fontWeight: 600,
-    },
-    subtitle1: { fontSize: 14, },
-    subtitle2: { fontSize: 12, },
-  },
+  palette: lightPalette,
+  typography: typography,
+});
+export const darkTheme = createTheme({
+  palette: darkPalette,
+  typography: typography,
 });

@@ -1,12 +1,11 @@
 import React from 'react';
-import FacebookIcon from '@mui/icons-material/Facebook';
-import TwitterIcon from '@mui/icons-material/Twitter';
-import { Icon } from '@mui/material';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faDiscord, faFacebook, faTwitter } from "@fortawesome/free-brands-svg-icons"
 
 function Footer() {
   return (
-    <footer>
-      <img src="" alt="logo" />
+    <footer className='row dark-mode'>
+      <img src="logo.svg" alt="logo" />
       <ul>
         <h5>About us</h5>
         <li>About Galaxia</li>
@@ -14,9 +13,9 @@ function Footer() {
       </ul>
       <ul>
         <h5>Follow us</h5>
-        <li><FacebookIcon/> /galaxia</li>
-        <li><TwitterIcon/> /galaxia</li>
-        <li><Icon baseClassName="fa-brands" className="fa-discord" /> /galaxia</li>
+        <li><FontAwesomeIcon icon={faFacebook} /> /galaxia</li>
+        <li><FontAwesomeIcon icon={faTwitter} /> /galaxia</li>
+        <li><FontAwesomeIcon icon={faDiscord} /> /galaxia</li>
       </ul>
     </footer>
   )
