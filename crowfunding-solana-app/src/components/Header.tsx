@@ -3,8 +3,8 @@ import { useLocation } from 'react-router-dom';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import { Button, Chip } from '@mui/material';
-import LoginIcon from '@mui/icons-material/Login';
-import LogoutIcon from '@mui/icons-material/Logout';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faArrowRightFromBracket, faArrowRightToBracket } from "@fortawesome/free-solid-svg-icons"
 
 function a11yProps(index: number) {
   return {
@@ -31,8 +31,8 @@ function Header() {
 
   return (
     <header className='row dark-mode'>
-      <img src="logo.svg" alt="logo" />
-      <Tabs  value={currpage} aria-label="nav" className="f-row">
+      <a href="/"> <img src="logo.svg" alt="logo"/> </a>
+      <Tabs  value={currpage} aria-label="nav" className="f-fill">
         <Tab label="Explore" {...a11yProps(0)}    href="/explore" />
         { isLogged ?
           <Tab label="Sponsoring" {...a11yProps(1)} href="/sponsoring" />
@@ -44,12 +44,12 @@ function Header() {
       <Chip
         label={wallet}
         onDelete={handleLogout}
-        deleteIcon={<LogoutIcon />}
+        deleteIcon={<FontAwesomeIcon icon={faArrowRightFromBracket} />}
       />
       :
       <Button variant="contained"
         onClick={handleLogin}
-        startIcon={<LoginIcon />}>
+        startIcon={<FontAwesomeIcon icon={faArrowRightToBracket} />}>
         Connect Wallet
       </Button> 
       }

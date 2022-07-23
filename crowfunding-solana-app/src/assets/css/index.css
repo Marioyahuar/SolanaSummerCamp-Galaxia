@@ -39,16 +39,19 @@
   --paper-gradient: linear-gradient(180deg, #F4F5F7 0%, #F9F9FB 100%);
 }
 
+html, body, #root {
+  width: 100%;
+  height: 100%;
+  background-color: var(--background);
+  color: var(--text-primary);
+  font-size: 12pt;
+}
+
 body {
   margin: 0;
   font-family: var(--fontfamily);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-}
-
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
 }
 
 h1, h2, h3, h4, h5 {
@@ -57,13 +60,13 @@ h1, h2, h3, h4, h5 {
     sans-serif;
 }
 
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
 
-html, body, #root {
-  width: 100%;
-  height: 100%;
-  background-color: var(--background);
-  color: var(--text-primary);
-  font-size: 12pt;
+.paper {
+  background-color: var(--paper);
 }
 
 ::-webkit-scrollbar {
@@ -109,16 +112,55 @@ hr {
   border-color: var(--divider) !important;
 }
 
+
 /*  */
-.row {
+.row, .column {
+	position: relative;
   display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  justify-content: center;
+	align-items: center;
+	align-content: center;
+}
+.row {
+  margin-left: auto;
+  margin-right: auto;
+  gap: 0.5em;
+	flex-wrap: wrap;
+	flex-direction: row !important;
+}
+.cols-1 {
+	max-width: 32em;
+	margin: 0px auto;
+}
+.row.cols-2 {
   gap: 1em;
 }
-.f-row {
-  flex-grow: 1;
+.row.cols-2 > *{
+	max-width: calc(50% - 1em);
+}
+.row.cols-3 {
+	justify-content: center;
+}
+.row.cols-3 > *{
+	max-width: calc(33% - 1em);
+}
+.f-fill {
+	flex-grow: 1;
+}
+.f-break {
+	flex-basis: 100%;
+}
+.text-center {
+	text-align: center;
+}
+.column {
+  gap: 1em;
+	flex-direction: column;
+}
+
+
+/*  */
+button {
+  border-radius: 2em !important;
 }
 
 
@@ -138,6 +180,21 @@ header img {
 
 
 /*  */
-button {
-  border-radius: 2em !important;
+section {
+	min-height: 20em;
+	padding: 2.5em 2em;
+	position: relative;
+}
+section.row {
+	justify-content: space-evenly;
+}
+section.column {
+	justify-content: center;
+}
+
+
+
+/*  */
+.step-gradient .MuiStepLabel-iconContainer > *{
+  background-image: var(--gradient-half2);
 }
