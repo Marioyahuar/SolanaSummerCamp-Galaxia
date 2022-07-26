@@ -16,6 +16,11 @@
   * yarn add @fortawesome/react-fontawesome@latest
 * Moment js:
   * yarn add moment
+  * yarn add @solana/wallet-adapter-base
+  * yarn add @solana/wallet-adapter-phantom
+  * yarn add @solana/wallet-adapter-react
+  * yarn add @solana/wallet-adapter-react-ui
+  * yarn add @solana/web3.js
 
 # Getting Started with Create React App
 
