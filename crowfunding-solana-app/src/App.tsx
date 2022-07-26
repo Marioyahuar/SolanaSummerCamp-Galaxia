@@ -32,7 +32,7 @@ function App() {
                   <Route path="/" element={< Landing />} />
                   <Route path="/explore" element={< Explore sponsoring={false} />} />
                   <Route path="/sponsoring" element={< Explore sponsoring={true} />} />
-                  <Route path="/:id" element={< Project />} />
+                  <Route path="/project/:id" element={< Project />} />
                 </Routes>
               </main>
             </ThemeProvider>

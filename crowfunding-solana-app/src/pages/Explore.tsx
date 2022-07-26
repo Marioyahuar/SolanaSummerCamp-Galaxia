@@ -12,6 +12,7 @@ function Explore( p : { sponsoring: boolean } ) {
 
   let projects: ProjectMin[] = [
     {
+      id: 1,
       name: "Projectname1",
       description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Rutrum lectus dictum risus enim egestas.",
       imgUrl: undefined,
@@ -22,6 +23,7 @@ function Explore( p : { sponsoring: boolean } ) {
       qPatrons: 123,
     },
     {
+      id: 2,
       name: "Projectname2",
       description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Rutrum lectus dictum risus enim egestas.",
       imgUrl: undefined,
@@ -32,6 +34,7 @@ function Explore( p : { sponsoring: boolean } ) {
       qPatrons: 8,
     },
     {
+      id: 3,
       name: "Projectname3",
       description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Rutrum lectus dictum risus enim egestas.",
       imgUrl: undefined,
@@ -42,6 +45,7 @@ function Explore( p : { sponsoring: boolean } ) {
       qPatrons: 123,
     },
     {
+      id: 4,
       name: "Projectname4",
       description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Rutrum lectus dictum risus enim egestas.",
       imgUrl: undefined,
@@ -52,6 +56,7 @@ function Explore( p : { sponsoring: boolean } ) {
       qPatrons: 8,
     },
     {
+      id: 5,
       name: "Projectname4",
       description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Rutrum lectus dictum risus enim egestas.",
       imgUrl: undefined,
@@ -66,6 +71,7 @@ function Explore( p : { sponsoring: boolean } ) {
       ]
     },
     {
+      id: 6,
       name: "Projectname5",
       description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Rutrum lectus dictum risus enim egestas.",
       imgUrl: undefined,

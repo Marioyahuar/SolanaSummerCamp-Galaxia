@@ -9,7 +9,7 @@ import Progress from './Progress'
 function ProjectCard( p: ProjectMin ) {
   return (
     <Card className='project-card'>
-      <CardActionArea>
+      <CardActionArea href={'/project/'+p.id}>
         <CardMedia
           component="img"
           image={p.imgUrl ?? "images/project_img.png"}

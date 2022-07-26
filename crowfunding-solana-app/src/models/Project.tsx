@@ -1,5 +1,6 @@
 interface ProjectMin {
   category?: string,
+  id: number,
   name: string,
   description: string,
   imgUrl?: string,

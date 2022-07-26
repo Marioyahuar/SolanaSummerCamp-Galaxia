@@ -15,6 +15,7 @@ function Landing() {
 
   let projects: ProjectMin[] = [
     {
+      id: 1,
       name: "Projectname",
       description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Rutrum lectus dictum risus enim egestas.",
       imgUrl: undefined,
