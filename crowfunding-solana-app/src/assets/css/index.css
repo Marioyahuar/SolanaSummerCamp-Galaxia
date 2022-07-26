@@ -112,10 +112,6 @@ mark {
 .material-icons {
   font-size: 1.2em;
 }
-hr {
-  min-width: 100%;
-  border-color: var(--divider) !important;
-}
 
 
 a {

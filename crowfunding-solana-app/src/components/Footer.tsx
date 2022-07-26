@@ -5,7 +5,7 @@ import { faDiscord, faFacebook, faTwitter } from '@fortawesome/free-brands-svg-i
 function Footer() {
   return (
     <footer className='row dark-mode'>
-      <img src="logo.svg" alt="logo" />
+      <img src={process.env.PUBLIC_URL + "/logo.svg"} alt="logo" />
       <ul>
         <h5>About us</h5>
         <li>About Galaxia</li>

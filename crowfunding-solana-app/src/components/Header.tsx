@@ -54,7 +54,7 @@ function Header() {
 
   return (
     <header className='row dark-mode'>
-      <a href="/"> <img src="logo.svg" alt="logo"/> </a>
+      <a href="/"> <img src={process.env.PUBLIC_URL + "/logo.svg"} alt="logo"/> </a>
       <Tabs  value={currpage} aria-label="nav" className="f-fill">
         <Tab label="Explore" {...a11yProps(0)}    href="/explore" />
         { isLogged ?
