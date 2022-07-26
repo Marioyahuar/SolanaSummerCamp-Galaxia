@@ -19,31 +19,31 @@ function App() {
 
   return (
     <ConnectionProvider endpoint={endpoint}>
-            <WalletProvider wallets={[wallet]}>
-                <WalletModalProvider>
-                    <div className="App">
-                      <BrowserRouter>
-                        <ThemeProvider theme={darkTheme}>
-                          <Header/>
-                        </ThemeProvider>
-                        <ThemeProvider theme={theme}>
-                          <main>
-                            <Routes>
-                              <Route path="/" element={< Landing />} />
-                              <Route path="/explore" element={< Explore />} />
-                              <Route path="/sponsoring" element={< Explore />} />
-                              <Route path="/:id" element={< Project />} />
-                            </Routes>
-                          </main>
-                        </ThemeProvider>
-                        <ThemeProvider theme={darkTheme}>
-                          <Footer />
-                        </ThemeProvider>
-                      </BrowserRouter>
-                    </div>
-                </WalletModalProvider>
-            </WalletProvider>
-        </ConnectionProvider>
+      <WalletProvider wallets={[wallet]}>
+        <WalletModalProvider>
+          {/* <div className="App"> */}
+          <BrowserRouter>
+            <ThemeProvider theme={darkTheme}>
+              <Header/>
+            </ThemeProvider>
+            <ThemeProvider theme={theme}>
+              <main>
+                <Routes>
+                  <Route path="/" element={< Landing />} />
+                  <Route path="/explore" element={< Explore sponsoring={false} />} />
+                  <Route path="/sponsoring" element={< Explore sponsoring={true} />} />
+                  <Route path="/:id" element={< Project />} />
+                </Routes>
+              </main>
+            </ThemeProvider>
+            <ThemeProvider theme={darkTheme}>
+              <Footer />
+            </ThemeProvider>
+          </BrowserRouter>
+          {/* </div> */}
+        </WalletModalProvider>
+      </WalletProvider>
+    </ConnectionProvider>
     
   );
 }

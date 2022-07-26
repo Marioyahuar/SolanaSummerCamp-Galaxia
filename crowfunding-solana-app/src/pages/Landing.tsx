@@ -1,9 +1,66 @@
 import React from 'react'
+import { Accordion, AccordionDetails, AccordionSummary, Link, Skeleton, Step, StepLabel, Stepper, Typography } from '@mui/material';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faDiscord, faFacebook, faTwitter } from '@fortawesome/free-brands-svg-icons';
-import { Skeleton, Step, StepLabel, Stepper, Typography } from '@mui/material';
+import { faAngleDown, faAngleRight } from '@fortawesome/free-solid-svg-icons';
+import ProjectCard from '../components/ProjectCard';
+import { ProjectMin } from '../models/Project';
+
+interface TitleText {
+  title: string,
+  text: string
+};
 
 function Landing() {
+
+  let projects: ProjectMin[] = [
+    {
+      name: "Projectname",
+      description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Rutrum lectus dictum risus enim egestas.",
+      imgUrl: undefined,
+      imgAlt: undefined,
+      solRaised: 123,
+      solGoal: 200,
+      dateLimit: new Date('2022-10-10'),
+      qPatrons: 123,
+    },
+  ]
+
+  const procSteps: TitleText[] = [
+    {
+      title: "Connect Wallet",
+      text: "Choose a Solana wallet"
+    },
+    {
+      title: "Explore projects",
+      text: "Check the projects of your interest."
+    },
+    {
+      title: "Patron a project",
+      text: "Choose your reward and submit your payment."
+    },
+  ]
+
+  const faqs: TitleText[] = [
+    {
+      title: "Question1?",
+      text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse malesuada lacus ex, sit amet blandit leo lobortis eget."
+    },
+    {
+      title: "Question2?",
+      text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse malesuada lacus ex, sit amet blandit leo lobortis eget."
+    },
+    {
+      title: "Question3?",
+      text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse malesuada lacus ex, sit amet blandit leo lobortis eget."
+    },
+    {
+      title: "Question4?",
+      text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse malesuada lacus ex, sit amet blandit leo lobortis eget."
+    },
+  ];
+
+
   return (
   <>
     <section id="home" className='row cols-2'>
@@ -29,33 +86,67 @@ function Landing() {
     </section>
 
 
-    <section className='paper'>
-      <Typography variant='h2' align='center' color='var(--primary-dark)'>
+    <section className='column paper'>
+      <Typography variant='h2' align='center' color='primary'>
         Investment process
       </Typography>
       <br /><br />
-      <Stepper alternativeLabel  className="step-gradient">
-        <Step completed={true} >
-          <StepLabel>Connect Wallet</StepLabel>
-          <p>Choose a Solana wallet</p>
+      <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" height='0px'>
+        <defs>
+          <linearGradient id="gradient" x2="0.35" y2="1">
+              <stop offset="0%" stop-color="var(--middle)" />
+              <stop offset="100%" stop-color="var(--secondary-main)" />
+            </linearGradient>
+        </defs>
+      </svg>
+      <Stepper className="step-gradient all-active">
+        {procSteps.map((s)=>{ return (
+        <Step>
+          <StepLabel>{s.title}</StepLabel>
+          <Typography paddingTop='0.5em'>{s.text}</Typography>
         </Step>
-        <Step completed={true}>
-          <StepLabel>Explore projects</StepLabel>
-          <p>Check the projects of your interest.</p>
-        </Step>
-        <Step completed={true}>
-          <StepLabel>Patron a project</StepLabel>
-          <p>Choose your reward and submit your payment.</p>
-        </Step>
+        ) })}
       </Stepper>
     </section>
 
 
-    <section className='paper'>
-      <Typography variant='h2' align='center' color='var(--primary-dark)'>
+    <section className='column'>
+      <Typography variant='h2' align='center' color='secondary'>
         Closing soon
       </Typography>
+      <div className='row'>
+        {projects.map((p,i )=><ProjectCard {...p} key={i} />)}
+      </div>
+      <Link href="/explore" fontWeight='bold' align='center'>
+        Find more &nbsp;
+        <FontAwesomeIcon icon={faAngleRight} />
+      </Link>
+    </section>
 
+
+    <section id="faq" className='row cols-2'>
+      <img src="images/question_closing.svg" alt="closing question sign" />
+      <div className='column'>
+        <Typography variant='h2' align='center' paddingBottom='1em'>
+          FAQ
+        </Typography>
+
+        {faqs.map((q, i)=>{ return (
+          <Accordion variant='outlined' key={i}>
+            <AccordionSummary
+              expandIcon={<FontAwesomeIcon icon={faAngleDown} />}
+              aria-controls={"panel"+i+"-content"}
+              id={"panel"+i+"-header"}
+            >
+              {q.title}
+            </AccordionSummary>
+            <AccordionDetails>
+              <Typography>{q.text}</Typography>
+            </AccordionDetails>
+          </Accordion>
+        )})}
+
+      </div>
     </section>
   </>
   )

@@ -16,6 +16,7 @@
   * yarn add @fortawesome/react-fontawesome@latest
 * Moment js:
   * yarn add moment
+* S:
   * yarn add @solana/wallet-adapter-base
   * yarn add @solana/wallet-adapter-phantom
   * yarn add @solana/wallet-adapter-react
