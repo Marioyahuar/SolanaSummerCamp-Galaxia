@@ -1,9 +1,9 @@
 @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;900&family=Poppins:wght@700&display=swap');
 
 :root {
-  --primary-main: #18ED98;
-  --primary-light: #64FAB2;
-  --primary-dark: #00C087;
+  --primary-main: #00C087;
+  --primary-light: #18ED98;
+  --primary-dark: #00B796;
   --primary-contrastText: #2A2843;
   --secondary-main: #AA68FE;
   --secondary-light: #CC78FF;
@@ -19,9 +19,11 @@
   --text-disabled: #A2AFC5;
   --divider: #4D4A7580;
   --paper: #EFF1F4;
-  --paper-gradient: linear-gradient(180deg, #24223C 0%, #2A2843 100%);
   --background: #F9F9FB;
+  --paper-gradient: linear-gradient(180deg, #F4F5F7 0%, #F9F9FB 100%);
   /* others */
+  --success: #79F09A;
+  --warning: #FFEC42;
   --shadow: 0px 1px 3px rgba(0, 0, 0, 0.12);
   --fontfamily: 'Jost', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
   'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
@@ -36,7 +38,7 @@
   --divider: #D6DDE880;
   --paper: #2A2843;
   --background: #1E1C35;
-  --paper-gradient: linear-gradient(180deg, #F4F5F7 0%, #F9F9FB 100%);
+  --paper-gradient: linear-gradient(180deg, #24223C 0%, #2A2843 100%);
 }
 
 html, body, #root {
@@ -44,7 +46,10 @@ html, body, #root {
   height: 100%;
   background-color: var(--background);
   color: var(--text-primary);
-  font-size: 12pt;
+  font-size: 14pt;
+}
+#root {
+  overflow: auto;
 }
 
 body {
@@ -65,6 +70,10 @@ code {
     monospace;
 }
 
+* {
+  font-family: inherit;
+}
+
 .paper {
   background-color: var(--paper);
 }
@@ -74,35 +83,31 @@ code {
 	height: 8px;
 }
 ::-webkit-scrollbar-thumb {
-	background: var(--primary-dark);
+	background: var(--primary-main);
 }
 ::-webkit-scrollbar-track {
 	background: var(--paper);
 }
 input[type="date"]::selection, mark {
-	background: var(--primary-dark);
+	background: var(--primary-main);
+  color: var(--text-primary);
 }
 mark {
 	padding: 0px 0.25em;
 }
 ::-moz-selection {
-	background: var(--primary-dark);
+	background: var(--primary-main);
+  color: var(--background);
 }
 ::selection {
-	background: var(--primary-dark);
+	background: var(--primary-main);
+  color: var(--background);
 }
 
 .material-icons {
 	font-size: 1.1em;
 	line-height: inherit;
 	position: relative;
-}
-
-a {
-  color: inherit;
-}
-a.btn {
-  text-decoration: none;
 }
 .material-icons {
   font-size: 1.2em;
@@ -113,19 +118,35 @@ hr {
 }
 
 
+a {
+  color: inherit;
+}
+a.btn {
+  text-decoration: none;
+}
+a, button, summary {
+  cursor: pointer;
+}
+
+
 /*  */
-.row, .column {
+.row, .column, .grid {
 	position: relative;
   display: flex;
-	align-items: center;
 	align-content: center;
+	align-items: center;
 }
-.row {
+.row, .grid {
   margin-left: auto;
   margin-right: auto;
-  gap: 0.5em;
 	flex-wrap: wrap;
-	flex-direction: row !important;
+}
+.row {
+  gap: 0.5em;
+  flex-direction: row !important;
+}
+span.row {
+  flex-wrap: nowrap;
 }
 .cols-1 {
 	max-width: 32em;
@@ -156,11 +177,30 @@ hr {
   gap: 1em;
 	flex-direction: column;
 }
+.column.c-short {
+  gap: 0.5em;
+  justify-content: stretch;
+  align-items: stretch;
+  width: 100%;
+}
+.column.c-short .row {
+  margin: 0px;
+}
+.grid {
+  gap: 1em;
+  align-items: flex-start;
+}
+
+/*  */
+ul {
+  margin: 0px;
+  padding: 0px;
+}
 
 
 /*  */
-button {
-  border-radius: 2em !important;
+button, .MuiPaper-root {
+  border-radius: 32px !important;
 }
 
 
@@ -172,18 +212,48 @@ header, footer {
 }
 
 header {
+  width: calc(100% - 2em);
   padding: 0px 1em;
+  top: 0px;
+  z-index: 10000;
+  position: sticky !important;
 }
 header img {
   max-height: 1.5em;
 }
 
+/*  */
+footer {
+  padding: 3em 3em 4em;
+  justify-content: space-around;
+}
+footer h5 {
+  position: relative;
+}
+footer h5::after {
+  content: '';
+  height: 2px;
+  position: absolute;
+  bottom: -0.75em;
+  left: 0px;
+  right: 0px;
+  background-image: var(--gradient-full);
+}
+footer li {
+  list-style: none;
+}
+
+/*  */
+main {
+  position: relative;
+}
 
 /*  */
 section {
-	min-height: 20em;
-	padding: 2.5em 2em;
+	min-height: 32em;
+	padding: 2em 2.5em;
 	position: relative;
+  display: flex;
 }
 section.row {
 	justify-content: space-evenly;
@@ -192,9 +262,113 @@ section.column {
 	justify-content: center;
 }
 
+/*  */
+.MuiPaper-root {
+  background-image: var(--paper-gradient);
+}
+
+/*  */
+main .MuiButtonBase-root.Mui-selected {
+  color: var(--text-primary);
+}
+
+/*  */
+.MuiStepper-root {
+  width: 100%;
+}
+.step-gradient .MuiStep-root {
+  max-width: 16em;
+}
+.step-gradient .MuiStepConnector-horizontal {
+  margin-top: 1.5em;
+}
+.step-gradient svg {
+  width: 2em;
+  height: 2em;
+}
+.step-gradient svg circle {
+  fill: url(#gradient) #AA68FE ;
+}
+.step-gradient svg text {
+  fill: var(--background);
+  font-weight: bold;
+  font-size: 0.5em;
+}
+.MuiStepLabel-label {
+  font-weight: bold !important;
+}
+.all-active .MuiStepLabel-label {
+  color: var(--text-primary) !important;
+}
+
+/*  */
+details {
+  align-self: stretch;
+  min-width: 300;
+}
+summary {
+  font-weight: bold;
+}
+details[open] summary {
+  color: var(--primary-dark);
+}
+details > div {
+  color: var(--text-secondary);
+}
+
+.MuiAccordion-root {
+  background: var(--background);
+  border: none !important;
+}
+.MuiAccordion-root::before {
+  content: none !important;
+}
+.MuiAccordion-root .MuiAccordionSummary-root {
+  font-weight: bold;
+}
+.MuiAccordion-root .MuiAccordionSummary-root .Mui-expanded {
+  color: var(--primary-dark);
+}
+
+/*  */
+.MuiLinearProgress-root {
+  width: 100%;
+  height: 1em !important;
+  background-color: var(--paper) !important;
+}
+.MuiLinearProgress-root, .MuiLinearProgress-bar {
+  border-radius: 1em;
+}
+.gradient .MuiLinearProgress-bar {
+  background-image: var(--gradient-full);
+}
 
 
 /*  */
-.step-gradient .MuiStepLabel-iconContainer > *{
-  background-image: var(--gradient-half2);
+.project-card {
+  max-width: 402px;
+}
+.project-card img {
+  height: 268px;
+  background: var(--paper);
+}
+
+
+/*  */
+#faq > div {
+  width: 50%;
+}
+
+
+@media (max-width: 1440px) {  
+  :root {
+    font-size: 12pt;
+  }
+  .project-card {
+    max-width: 300px;
+  }
+  .project-card img {
+    height: 200px;
+    background: var(--paper);
+  }
 }
