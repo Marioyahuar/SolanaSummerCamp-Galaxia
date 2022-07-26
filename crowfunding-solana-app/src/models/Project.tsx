@@ -1,15 +1,29 @@
+import { Reward } from "./Reward";
+
 interface ProjectMin {
   category?: string,
   id: number,
   name: string,
   description: string,
-  imgUrl?: string,
-  imgAlt?: string,
+  images?: {url:string, alt:string}[],
   solRaised: number,
   solGoal: number,
   dateLimit: Date,
   qPatrons: number,
-  rewards?: {name:string, complete:boolean}[]
+  userRewards?: {name:string, complete:boolean}[]
 }
 
-export type { ProjectMin };
+interface ProjectFull extends ProjectMin {
+  socialMedia?: {
+    media: 'TWITTER'|'DISCORD'|'FACEBOOK'|'MEDIUM',
+    url: string
+  }[],
+  reasonsToInvest: string[],
+  descriptionFull: string,
+  team: {name:string, imgUrl?:string, description: string},
+  risks?: string,
+  termsAndConditions: string,
+  rewards?: Reward[]
+}
+
+export type { ProjectMin, ProjectFull };
