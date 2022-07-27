@@ -24,7 +24,8 @@
   /* others */
   --success: #79F09A;
   --warning: #FFEC42;
-  --shadow: 0px 1px 3px rgba(0, 0, 0, 0.12);
+  --shadow-lvl1: 0px 1px 3px rgba(0, 0, 0, 0.12);
+  --shadow-input: 0px 4px 4px rgba(255, 255, 255, 0.05), inset 0px 2px 8px rgba(0, 0, 0, 0.075);
   --fontfamily: 'Jost', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
   'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
   sans-serif;
@@ -72,6 +73,11 @@ code {
 
 * {
   font-family: inherit;
+  cursor: inherit;
+}
+
+li {
+  margin-left: 1.25em !important;
 }
 
 .paper {
@@ -143,6 +149,7 @@ a, button, summary {
 }
 span.row {
   flex-wrap: nowrap;
+  margin: 0px;
 }
 .cols-1 {
 	max-width: 32em;
@@ -170,13 +177,14 @@ span.row {
 	text-align: center;
 }
 .column {
-  gap: 1em;
-	flex-direction: column;
+  gap: 1.5em;
+	flex-direction: column !important;
 }
 .column.c-short {
   gap: 0.5em;
-  justify-content: stretch;
-  align-items: stretch;
+  /* justify-content: stretch;
+  align-items: stretch; */
+  align-items: flex-start;
   width: 100%;
 }
 .column.c-short .row {
@@ -194,27 +202,41 @@ ul {
 }
 
 /*  */
+.MuiPaper-root {
+  background-image: var(--paper-gradient);
+}
+
+/*  */
 .border-gradient {
   background: 
     linear-gradient(var(--background) 0 0) padding-box,
     var(--gradient-full) border-box;
   border: 2pt solid transparent;
 }
-button.gradient {
+button.gradient, .MuiButton-root.gradient {
   background: var(--gradient-half1);
   transition: 0.2s !important;
   color: var(--background);
 }
-button.gradient:hover {
+button.gradient:hover, .MuiButton-root.gradient:hover {
   background: var(--gradient-half2);
+}
+.gradient .MuiLinearProgress-bar,
+.MuiTypography-root.gradient {
+  background-image: var(--gradient-full);
+}
+.MuiTypography-root.gradient {
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-fill-color: transparent;
 }
 
 
 /*  */
-button, .MuiPaper-root {
+button, .MuiPaper-root, .MuiButton-root {
   border-radius: 1.25em !important;
 }
-
 
 /*  */
 header, footer {
@@ -241,18 +263,16 @@ footer {
 }
 footer h5 {
   position: relative;
+  padding-bottom: 1em;
 }
 footer h5::after {
   content: '';
   height: 2px;
   position: absolute;
-  bottom: -0.75em;
+  bottom: 0.5em;
   left: 0px;
   right: 0px;
   background-image: var(--gradient-full);
-}
-footer li {
-  list-style: none;
 }
 
 /*  */
@@ -267,21 +287,27 @@ section {
 	position: relative;
   display: flex;
 }
+section.MuiGrid-root {
+  justify-content: space-around;
+}
 section.row {
 	justify-content: space-evenly;
 }
-section.column, section.MuiGrid-root {
+section.column {
 	justify-content: center;
-}
-
-/*  */
-.MuiPaper-root {
-  background-image: var(--paper-gradient);
 }
 
 /*  */
 main .MuiButtonBase-root.Mui-selected {
   color: var(--text-primary);
+}
+
+/*  */
+aside {
+  max-width: 20em !important;
+}
+aside .MuiTypography-caption {
+  align-self: flex-start;
 }
 
 /*  */
@@ -351,12 +377,13 @@ details > div {
 .MuiLinearProgress-root, .MuiLinearProgress-bar {
   border-radius: 1em;
 }
-.gradient .MuiLinearProgress-bar {
-  background-image: var(--gradient-full);
-}
 
 
 /*  */
+.project-card, .reward-card {
+  position: relative;
+  width: 100%;
+}
 .project-card {
   max-width: 402px;
 }
@@ -364,7 +391,34 @@ details > div {
   height: 268px;
   background: var(--paper);
 }
-
+.project-card .MuiCardContent-root.column {
+  padding: 1.25em 1em 1em;
+  align-items: stretch;
+  gap: 1em;
+}
+.project-card .column.c-short {
+  align-items: stretch;
+}
+.project-card .acronym {
+  width: 100%;
+  top: 48px;
+  position: absolute;
+  text-align: center;
+  color: #FFFFFF80;
+  font-size: 4em;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+/*  */
+.reward-card {
+  max-width: 16em;
+  padding: 1em 1.5em;
+  display: flex;
+  flex-direction: column;
+  justify-content: stretch;
+  align-items: stretch;
+  gap: 1em;
+}
 
 /*  */
 div[role="tabpanel"]:not([hidden]) {
@@ -397,12 +451,14 @@ div[role="tabpanel"]:not([hidden]) {
   max-width: 900px;
   width: 100%;
   position: relative;
-}
-.slider .imgs {
   margin-left: auto;
   margin-right: auto;
 }
+.slider .imgs {
+  width: 100%;
+}
 .slider img {
+  width: 100%;
   height: 600px;
   object-fit: cover;
 }
@@ -421,6 +477,31 @@ div[role="tabpanel"]:not([hidden]) {
   position: absolute;
   bottom: 1em;
   justify-content: center;
+}
+
+
+/* .MuiTextField-root {} */
+.MuiFilledInput-root {
+  background-color: var(--background) !important;
+  border-radius: 2em !important;
+  border-bottom: 2pt solid transparent;
+  box-shadow: var(--shadow-input);
+}
+.MuiFilledInput-root:hover {
+  background-color: var(--paper);
+}
+.MuiFilledInput-root:before,
+.MuiFilledInput-root:after {
+  content: none !important;
+}
+.MuiFilledInput-root.Mui-focused {
+  background-color: var(--background);
+  border-bottom: 2pt solid var(--primary-main);
+}
+
+/*  */
+a .MuiChip-root {
+  cursor: pointer;
 }
 
 

@@ -15,9 +15,9 @@ function ProjectCard( p: ProjectMin ) {
           component="img"
           image={p.images ? p.images[0].url : "images/project_img.png"}
           alt={p.images ? p.images[0].alt : "project image"}
-        >
-          {/* {p.imgUrl ? '' : p.name.split(" ").map(s=>s[0]).join('') } */}
-        </CardMedia>
+        />
+        {p.images ? <></> :
+        <div className='acronym'>{p.name.split(" ").map(s=>s.charAt(0)).join('')}</div>}
 
         <CardContent className='column'>
           <div>
@@ -52,17 +52,17 @@ function ProjectCard( p: ProjectMin ) {
           </Stack>
 
           { (p.userRewards !== undefined && p.userRewards.length > 0) ? 
-            <ul className='column c-short'>
+            <Stack className='column c-short'>
               {p.userRewards.map((r,i)=>{return(
-                <li className='row'>
+                <Typography className='row'>
                   <FontAwesomeIcon icon={r.complete ? faCheck : faEllipsis} />
                   <Typography className='f-fill' component='span'>{r.name}</Typography>
                   <Chip size="small"
                     label={r.complete?'DONE':'WAITING'}
                     color={r.complete?"success":"warning"} />
-                </li>
+                </Typography>
               )})}
-            </ul>
+            </Stack>
           : <></>}
           
         </CardContent>

@@ -2,12 +2,13 @@ import React from 'react'
 import { useParams } from 'react-router-dom';
 import { ProjectFull } from '../models/Project';
 import Slider from '../components/Slider';
-import { Button, Chip, Grid, IconButton, Stack, Tab, Tabs, Typography } from '@mui/material';
+import { Button, Chip, Grid, IconButton, Link, Stack, Tab, Tabs, Typography } from '@mui/material';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTwitter, faDiscord, faFacebook, faMedium } from '@fortawesome/free-brands-svg-icons';
 import Progress from '../components/Progress';
 import { faCheck, faUserGroup } from '@fortawesome/free-solid-svg-icons';
 import Timer from '../components/Timer';
+import RewardCard from '../components/RewardCard';
 
 // TAB PANEL CONTROL START
 interface TabPanelProps {
@@ -79,6 +80,7 @@ function Project() {
     rewards: [
       {
         id: 0,
+        name: 'Reward1',
         minPrice: 150,
         description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Rutrum lectus dictum risus enim egestas.',
         perksIncluded: [
@@ -106,40 +108,41 @@ function Project() {
         }] } />
       </Grid>
 
-      <Grid item lg={3} md={8}>
-        <Chip size="small" label={project.category}/>
+      <Grid item lg={3} md={8} className="column">
 
-        <Typography variant="h2">{project.name}</Typography>
-        <Typography variant="body2" color="text.secondary">{project.description}</Typography>
-
-        {
-        project.socialMedia ?
-        <Stack direction="row" spacing={1}>
+        <div className='column c-short'>
+          <Link href={'/explore?category='+project.category} underline="none">
+            <Chip size="small" label={project.category}/>
+          </Link>
+          <Typography variant="h2">{project.name}</Typography>
+          <Typography variant="body2" color="text.secondary">{project.description}</Typography>
           {
-          project.socialMedia?.map((sm, i)=>
-          <IconButton aria-label={sm.media} href={sm.url} target="_blank" key={i} color="inherit">
+          project.socialMedia ?
+          <Stack direction="row" spacing={0}>
             {
-            sm.media === 'TWITTER' ?
-            <FontAwesomeIcon icon={faTwitter} />
-            : sm.media === 'DISCORD' ?
-            <FontAwesomeIcon icon={faDiscord} />
-            : sm.media === 'FACEBOOK' ?
-            <FontAwesomeIcon icon={faFacebook} />
-            : sm.media === 'MEDIUM' ?
-            <FontAwesomeIcon icon={faMedium} />
-            : ''
-            }
-          </IconButton>
-          )}
-        </Stack>
-        : ''
-        }
+            project.socialMedia?.map((sm, i)=>
+            <IconButton aria-label={sm.media} href={sm.url} target="_blank" key={i} color="inherit">
+              {
+              sm.media === 'TWITTER' ?
+              <FontAwesomeIcon icon={faTwitter} />
+              : sm.media === 'DISCORD' ?
+              <FontAwesomeIcon icon={faDiscord} />
+              : sm.media === 'FACEBOOK' ?
+              <FontAwesomeIcon icon={faFacebook} />
+              : sm.media === 'MEDIUM' ?
+              <FontAwesomeIcon icon={faMedium} />
+              : ''
+              }
+            </IconButton>
+            )}
+          </Stack>
+          : ''
+          }
+        </div>
 
-        <br />
         <Progress reached={project.solRaised} goal={project.solGoal} />
-        <br />
+
         <Timer dateLimit={project.dateLimit}/>
-        <br />
 
         <div className='row'>
           <Typography component="span" className="row f-fill">
@@ -147,11 +150,12 @@ function Project() {
             <strong>{project.qPatrons}</strong>
             patrons
           </Typography>
-          <Button variant="contained" className='gradient'
+          <Button variant="contained" className='gradient' href='#support'
             startIcon={<FontAwesomeIcon icon={faCheck} />}>
             Patron this project!
           </Button>
         </div>
+
       </Grid>
     </Grid>
 
@@ -202,8 +206,12 @@ function Project() {
 
       </Grid>
 
-      <Grid item lg={3} md={6} sm={8} component="aside">
+      <Grid item lg={3} md={6} sm={8} id="support" component="aside" className='column'>
         <Typography variant="caption">SUPPORT</Typography>
+        <RewardCard projectId={parseInt(projectId??'') ?? 0} key={0}/>
+        { project.rewards?.map((r, i)=>
+        <RewardCard projectId={parseInt(projectId??'') ?? 0} reward={r} key={i+1} />
+        ) }
       </Grid>
 
     </Grid>

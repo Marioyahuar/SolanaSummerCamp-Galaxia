@@ -10,6 +10,13 @@ function Timer( p: {dateLimit: Date} ) {
   const [diffTime , setDiffTime] = React.useState(
     moment.duration( dateLimit.diff(new Date(), 'milliseconds') )
   );
+  const handleTick = (event: React.SyntheticEvent) => {
+    let msLeft = dateLimit.diff(new Date(), 'milliseconds');
+    setDiffTime( moment.duration(msLeft) );
+  };
+  React.useEffect(()=>{
+    setInterval(handleTick, 1000);
+  });
 
   return (
     <div className='timer border-gradient'>

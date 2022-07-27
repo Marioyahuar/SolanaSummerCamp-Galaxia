@@ -64,20 +64,23 @@ function Landing() {
   return (
   <>
     <section id="home" className='row cols-2'>
-      <div>
-        <img src="logo.svg" alt="logo" />
-        <div className='row'>
-        <FontAwesomeIcon icon={faFacebook} />
-        <FontAwesomeIcon icon={faTwitter} />
-        <FontAwesomeIcon icon={faDiscord} />
+      <div className='column'>
+        <div className='column c-short'>
+          <img src="logo.svg" alt="logo"/>
+          <div className='row'>
+            <FontAwesomeIcon icon={faFacebook} />
+            <FontAwesomeIcon icon={faTwitter} />
+            <FontAwesomeIcon icon={faDiscord} />
+          </div>
         </div>
-        <br/><br/>
-        <Typography variant="h3" textTransform='uppercase'>
-          Get to know GALAXIA
-        </Typography>
-        <p>
-        Lorem ipsum dolor sit amet. Aut impedit nemo et quia perferendis eum atque sunt aut architecto magnam et quia incidunt et reiciendis galisum. Vel soluta ut aspernatur laboriosam ut minima ratione vel consequatur perferendis. Lorem ipsum dolor sit amet. Aut impedit nemo et quia perferendis eum atque sunt aut architecto magnam et quia incidunt et reiciendis galisum.
-        </p>
+        <div className='column c-short'>
+          <Typography variant="h3" textTransform='uppercase'>
+            Get to know GALAXIA
+          </Typography>
+          <Typography>
+            Lorem ipsum dolor sit amet. Aut impedit nemo et quia perferendis eum atque sunt aut architecto magnam et quia incidunt et reiciendis galisum. Vel soluta ut aspernatur laboriosam ut minima ratione vel consequatur perferendis. Lorem ipsum dolor sit amet. Aut impedit nemo et quia perferendis eum atque sunt aut architecto magnam et quia incidunt et reiciendis galisum.
+          </Typography>
+        </div>
         <Typography variant="h6" align='center' fontWeight='bold'>
           Lorem ipsum dolor sit amet. Aut impedit nemo et quia perferendis eum atque sunt
         </Typography>
@@ -90,18 +93,18 @@ function Landing() {
       <Typography variant='h2' align='center' color='primary'>
         Investment process
       </Typography>
-      <br /><br />
+      <br />
       <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" height='0px'>
         <defs>
           <linearGradient id="gradient" x2="0.35" y2="1">
-              <stop offset="0%" stop-color="var(--middle)" />
-              <stop offset="100%" stop-color="var(--secondary-main)" />
-            </linearGradient>
+            <stop offset="0%" stopColor="var(--middle)" />
+            <stop offset="100%" stopColor="var(--secondary-main)" />
+          </linearGradient>
         </defs>
       </svg>
       <Stepper className="step-gradient all-active">
-        {procSteps.map((s)=>{ return (
-        <Step>
+        {procSteps.map((s,i)=>{ return (
+        <Step key={i}>
           <StepLabel>{s.title}</StepLabel>
           <Typography paddingTop='0.5em'>{s.text}</Typography>
         </Step>
