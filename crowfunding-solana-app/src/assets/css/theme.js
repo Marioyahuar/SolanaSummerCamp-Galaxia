@@ -23,7 +23,7 @@ const typography = {
   },
   h2: {
     fontFamily: 'Poppins, Nunito, ' + commonFonts,
-    fontSize: '2em',
+    fontSize: '2.25em',
     fontWeight: 700,
   },
   h3: {

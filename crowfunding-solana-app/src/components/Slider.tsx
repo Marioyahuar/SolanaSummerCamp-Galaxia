@@ -9,13 +9,15 @@ function Slider( p:{images:{url:string,alt:string}[]} ) {
 
   const [currImg, setCurrImg] = React.useState(0);
   const handleChange = (event: React.MouseEvent<HTMLElement>, newCurrImg: number) => {
-    setCurrImg(newCurrImg);
+    if (newCurrImg !== null) {
+      setCurrImg(newCurrImg);
+    }
   };
 
 
   return (
-    <>
-  {/* <ThemeProvider theme={darkTheme}> */}
+  <>
+  <ThemeProvider theme={darkTheme}>
     <div className='slider dark-mode'>
       <div className='imgs'>
         {p.images.map((img, i)=>
@@ -41,7 +43,7 @@ function Slider( p:{images:{url:string,alt:string}[]} ) {
         )})}
       </ToggleButtonGroup>
     </div>
-  {/* </ThemeProvider> */}
+  </ThemeProvider>
   </>
   )
 }

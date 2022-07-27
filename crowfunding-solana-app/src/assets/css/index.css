@@ -193,10 +193,26 @@ ul {
   padding: 0px;
 }
 
+/*  */
+.border-gradient {
+  background: 
+    linear-gradient(var(--background) 0 0) padding-box,
+    var(--gradient-full) border-box;
+  border: 2pt solid transparent;
+}
+button.gradient {
+  background: var(--gradient-half1);
+  transition: 0.2s !important;
+  color: var(--background);
+}
+button.gradient:hover {
+  background: var(--gradient-half2);
+}
+
 
 /*  */
 button, .MuiPaper-root {
-  border-radius: 32px !important;
+  border-radius: 1.25em !important;
 }
 
 
@@ -254,7 +270,7 @@ section {
 section.row {
 	justify-content: space-evenly;
 }
-section.column {
+section.column, section.MuiGrid-root {
 	justify-content: center;
 }
 
@@ -351,10 +367,74 @@ details > div {
 
 
 /*  */
+div[role="tabpanel"]:not([hidden]) {
+  padding: 2em 1em;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5em;
+}
+
+
+/*  */
+.timer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0.75em 1em;
+  gap: 0.5em;
+  border-radius: 1em;
+  width: fit-content;
+}
+.timer .MuiPaper-root {
+  width: 3em;
+  padding: 0.5em 0.5em 0.25em;
+  text-align: center;
+}
+
+
+/*  */
+.slider {
+  max-width: 900px;
+  width: 100%;
+  position: relative;
+}
+.slider .imgs {
+  margin-left: auto;
+  margin-right: auto;
+}
+.slider img {
+  height: 600px;
+  object-fit: cover;
+}
+.slider > button {
+  position: absolute;
+  top: calc(50% - 1em);
+}
+.slider > button[aria-label="previous"] {
+  left: 0.5em;
+}
+.slider > button[aria-label="next"] {
+  right: 0.5em;
+}
+.slider .MuiToggleButtonGroup-root {
+  width: 100%;
+  position: absolute;
+  bottom: 1em;
+  justify-content: center;
+}
+
+
+/*  */
 #faq > div {
   width: 50%;
 }
 
+
+@media (max-width: 1600px) {
+  .slider img {
+    height: 540px;
+  }
+}
 
 @media (max-width: 1440px) {  
   :root {
@@ -366,5 +446,14 @@ details > div {
   .project-card img {
     height: 200px;
     background: var(--paper);
+  }
+  .slider img {
+    height: 500px;
+  }
+}
+
+@media (max-width: 1280px) {
+  .slider img {
+    height: 480px;
   }
 }

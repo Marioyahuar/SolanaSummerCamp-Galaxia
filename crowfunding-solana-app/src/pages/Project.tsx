@@ -7,6 +7,36 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTwitter, faDiscord, faFacebook, faMedium } from '@fortawesome/free-brands-svg-icons';
 import Progress from '../components/Progress';
 import { faCheck, faUserGroup } from '@fortawesome/free-solid-svg-icons';
+import Timer from '../components/Timer';
+
+// TAB PANEL CONTROL START
+interface TabPanelProps {
+  children?: React.ReactNode;
+  index: number;
+  value: number;
+}
+function TabPanel(props: TabPanelProps) {
+  const { children, value, index, ...other } = props;
+  return (
+    <div
+      role="tabpanel"
+      hidden={value !== index}
+      id={`tabpanel-${index}`}
+      aria-labelledby={`tab-${index}`}
+      {...other}
+    >
+      {children}
+    </div>
+  );
+}
+function a11yProps(index: number) {
+  return {
+    id: `tab-${index}`,
+    'aria-controls': `tabpanel-${index}`,
+  };
+}
+// TAB PANEL CONTROL END
+
 
 function Project() {
   //id del proyecto
@@ -21,11 +51,12 @@ function Project() {
     solGoal: 200,
     dateLimit: new Date('2022-10-25'),
     qPatrons: 80,
-    images: [
-      {url:"images/project_img.png", alt:"img1"},
-      {url:"images/project_img copy.png", alt:"img2"},
-      {url:"logo512.png", alt:"img3"},
-    ],
+    images: undefined,
+    // [
+    //   {url:"images/project_img.png", alt:"img1"},
+    //   {url:"images/project_img copy.png", alt:"img2"},
+    //   {url:"logo512.png", alt:"img3"},
+    // ]
     socialMedia: [
       { media: 'TWITTER', url: '#'},
       { media: 'DISCORD', url: '#'},
@@ -68,18 +99,17 @@ function Project() {
   return (
   <>
     <Grid container spacing={2} component="section">
-      <Grid item xs={8}>
-        {
-        project.images ?
-          <Slider images={project.images} /> :
-          <img src="images/project_img.png" alt="project image"/>
-        }
+      <Grid item lg={8}>
+        <Slider images={project.images ?? [{
+          url: process.env.PUBLIC_URL + "/images/project_img.png",
+          alt:"project image"
+        }] } />
       </Grid>
 
-      <Grid item xs={4}>
+      <Grid item lg={3} md={8}>
         <Chip size="small" label={project.category}/>
 
-        <Typography variant="h1">{project.name}</Typography>
+        <Typography variant="h2">{project.name}</Typography>
         <Typography variant="body2" color="text.secondary">{project.description}</Typography>
 
         {
@@ -108,14 +138,16 @@ function Project() {
         <br />
         <Progress reached={project.solRaised} goal={project.solGoal} />
         <br />
+        <Timer dateLimit={project.dateLimit}/>
+        <br />
 
         <div className='row'>
-          <span className='row' key={2}>
+          <Typography component="span" className="row f-fill">
             <FontAwesomeIcon icon={faUserGroup} />
             <strong>{project.qPatrons}</strong>
-            <small>patrons</small>
-          </span>
-          <Button variant="contained"
+            patrons
+          </Typography>
+          <Button variant="contained" className='gradient'
             startIcon={<FontAwesomeIcon icon={faCheck} />}>
             Patron this project!
           </Button>
@@ -124,8 +156,9 @@ function Project() {
     </Grid>
 
     <Grid container spacing={2} component="section">
-      <Grid item xs={6}>
+      <Grid item lg={5} md={8}>
         <Typography variant="caption">PROJECT DETAILS</Typography>
+
         <Tabs value={selectedTab} onChange={handleTabChange} aria-label="categories">
           <Tab label="Overview" />
           <Tab label="Team" />
@@ -133,34 +166,43 @@ function Project() {
           <Tab label="Terms" />
         </Tabs>
 
-        <Typography variant="h4">Reasons to Invest</Typography>
-        <ul>
-          { project.reasonsToInvest.map((r,i) => <li key={i}>{r}</li>) }
-        </ul>
+        <TabPanel value={selectedTab} index={0}>
+          <Typography variant="h4">Reasons to Invest</Typography>
+          <ul>
+            {project.reasonsToInvest.map((r,i) =>
+            <Typography key={i} component="li">{r}</Typography>
+            )}
+          </ul>
+          <br/>
+          <Typography variant="h4">Description</Typography>
+          <Typography>{ project.description }</Typography>
+        </TabPanel>
 
-        <Typography variant="h4">Description</Typography>
-        { project.description }
-
-        <Typography variant="h4">Team</Typography>
-        <Grid container spacing={2}>
-          <Grid item xs={4}>
-            <img src={project.team.imgUrl} alt={project.team.name} />
+        <TabPanel value={selectedTab} index={1}>
+          <Typography variant="h4">{project.team.name}</Typography>
+          <Grid container spacing={2}>
+            <Grid item xs={4}>
+              <img src={project.team.imgUrl} alt={project.team.name} />
+            </Grid>
+            <Grid item xs={8}>
+              <Typography>{project.team.description}</Typography>
+            </Grid>
           </Grid>
-          <Grid item xs={8}>
-            <Typography variant="h5">{project.team.name}</Typography>
-            <Typography>{project.team.description}</Typography>
-          </Grid>
-        </Grid>
+        </TabPanel>
 
-        <Typography variant="h4">Risks</Typography>
-        <Typography>{project.risks}</Typography>
+        <TabPanel value={selectedTab} index={2}>
+          <Typography variant="h4">Risks</Typography>
+          <Typography>{project.risks}</Typography>
+        </TabPanel>
 
-        <Typography variant="h4">Terms and conditions</Typography>
-        <Typography>{project.risks}</Typography>
+        <TabPanel value={selectedTab} index={3}>
+          <Typography variant="h4">Terms and conditions</Typography>
+          <Typography>{project.risks}</Typography>
+        </TabPanel>
+
       </Grid>
 
-
-      <Grid item xs={4} component="aside">
+      <Grid item lg={3} md={6} sm={8} component="aside">
         <Typography variant="caption">SUPPORT</Typography>
       </Grid>
 
