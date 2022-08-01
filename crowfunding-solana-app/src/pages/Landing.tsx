@@ -85,7 +85,8 @@ function Landing() {
           Lorem ipsum dolor sit amet. Aut impedit nemo et quia perferendis eum atque sunt
         </Typography>
       </div>
-      <Skeleton variant="rectangular" width={480} height={360} />
+      {/* <Skeleton variant="rectangular" width={480} height={360} /> */}
+      <img src="/images/cover.png" alt="cover" />
     </section>
 
 

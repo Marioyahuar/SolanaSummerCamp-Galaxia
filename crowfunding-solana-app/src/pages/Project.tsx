@@ -103,7 +103,7 @@ function Project() {
     <Grid container spacing={2} component="section">
       <Grid item lg={8}>
         <Slider images={project.images ?? [{
-          url: process.env.PUBLIC_URL + "/images/project_img.png",
+          url: process.env.PUBLIC_URL + "/images/project_"+ (project.id%3 + 1) +".png",
           alt:"project image"
         }] } />
       </Grid>

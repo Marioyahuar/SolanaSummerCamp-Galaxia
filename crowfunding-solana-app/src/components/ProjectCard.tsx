@@ -13,7 +13,7 @@ function ProjectCard( p: ProjectMin ) {
 
         <CardMedia
           component="img"
-          image={p.images ? p.images[0].url : "images/project_img.png"}
+          image={p.images ? p.images[0].url : process.env.PUBLIC_URL + "/images/project_" + (p.id%3+1) + ".png"}
           alt={p.images ? p.images[0].alt : "project image"}
         />
         {p.images ? <></> :

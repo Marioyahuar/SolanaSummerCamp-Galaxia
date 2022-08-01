@@ -282,7 +282,7 @@ main {
 
 /*  */
 section {
-	min-height: 32em;
+	min-height: calc(90vh - 4em);
 	padding: 2em 2.5em;
 	position: relative;
   display: flex;
