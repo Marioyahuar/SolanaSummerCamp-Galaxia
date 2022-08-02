@@ -10,6 +10,25 @@ function Explore( p : { sponsoring: boolean } ) {
     'Collections', 'P2E Games', 'Solutions'
   ]
 
+  //Leer algo de una base de datos:
+  
+  /*constructor(props) {
+      super(props);
+      this.state = {
+          proyectos: [],
+      };
+  }
+  
+  async componentDidMount() {
+      const respuesta = await fetch(`http://localhost/obtenerProyectos.php`);
+      const proyectos = await respuesta.json();
+      console.log(proyectos)
+      this.setState({
+          proyectos: proyectos,
+      });
+  }*/
+  
+
   let projects: ProjectMin[] = [
     {
       id: 1,
@@ -20,66 +39,28 @@ function Explore( p : { sponsoring: boolean } ) {
       solGoal: 200,
       dateLimit: new Date('2022-10-10'),
       qPatrons: 123,
-    },
-    {
-      id: 2,
-      name: "Projectname2",
-      description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Rutrum lectus dictum risus enim egestas.",
-      images: undefined,
-      solRaised: 321,
-      solGoal: 400,
-      dateLimit: new Date('2022-09-10'),
-      qPatrons: 8,
-    },
-    {
-      id: 3,
-      name: "Projectname3",
-      description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Rutrum lectus dictum risus enim egestas.",
-      images: undefined,
-      solRaised: 123,
-      solGoal: 200,
-      dateLimit: new Date('2022-10-10'),
-      qPatrons: 123,
-    },
-    {
-      id: 4,
-      name: "Projectname4",
-      description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Rutrum lectus dictum risus enim egestas.",
-      images: undefined,
-      solRaised: 321,
-      solGoal: 400,
-      dateLimit: new Date('2022-09-10'),
-      qPatrons: 8,
-    },
-    {
-      id: 5,
-      name: "Projectname4",
-      description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Rutrum lectus dictum risus enim egestas.",
-      images: undefined,
-      solRaised: 123,
-      solGoal: 200,
-      dateLimit: new Date('2022-10-10'),
-      qPatrons: 123,
-      userRewards: [
-        { name: 'Reward1', complete: false },
-        { name: 'Reward2', complete: true },
-      ]
-    },
-    {
-      id: 6,
-      name: "Projectname5",
-      description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Rutrum lectus dictum risus enim egestas.",
-      images: undefined,
-      solRaised: 321,
-      solGoal: 400,
-      dateLimit: new Date('2022-09-10'),
-      qPatrons: 8,
-      userRewards: [
-        { name: 'Reward1', complete: false },
-        { name: 'Reward2', complete: true },
-      ]
-    },
+    }
   ]
+
+  const [proyectos, setProyectos] = React.useState([]);
+  let test = true;
+  React.useEffect(() => {
+    async function getProjects() {
+      const respuesta = await fetch(`http://localhost/obtenerProyectos.php`);
+      const allProyectos = await respuesta.json();
+      setProyectos(allProyectos)
+      console.log(allProyectos)
+      
+    }
+    getProjects();
+}, [])
+
+function changetest(){
+
+  test = !test;
+  console.log(test);
+  console.log(proyectos)
+}
   
   const [selectedCat, setSelectedCat] = React.useState(0);
   const [listedProjects, setListedProjects] = React.useState(projects);
@@ -104,7 +85,7 @@ function Explore( p : { sponsoring: boolean } ) {
       <Tab label={c} key={i+1} />
       )}
     </Tabs>
-
+    <button onClick={changetest}> TEST </button>
     <div className='grid'>
     {
       listedProjects.length === 0 ? 
@@ -120,3 +101,56 @@ function Explore( p : { sponsoring: boolean } ) {
 }
 
 export default Explore
+
+/*
+import React from 'react';
+//import Constantes from "./Constantes";
+//import { ToastContainer } from 'react-toastify';
+//import 'react-toastify/dist/ReactToastify.css';
+import FilaDeTablaDeVideojuego from './FilaDeTablaDeVideojuego';
+class Explore extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            proyectos: [],
+        };
+    }
+    async componentDidMount() {
+        const respuesta = await fetch(`http://localhost/obtenerProyectos.php`);
+        const proyectos = await respuesta.json();
+        console.log(proyectos)
+        this.setState({
+            proyectos: proyectos,
+        });
+    }
+    render() {
+        return (
+            <div>
+                <div className="column">
+                    <h1 className="is-size-3">Ver videojuegos</h1>
+                    
+                </div>
+                <div className="table-container">
+                    <table className="table is-fullwidth is-bordered">
+                        <thead>
+                            <tr>
+                                <th>Nombre</th>
+                                <th>Precio</th>
+                                <th>Calificación</th>
+                                <th>Editar</th>
+                                <th>Eliminar</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {this.state.proyectos.map(proyecto => {
+                                return <FilaDeTablaDeVideojuego key={proyecto.id} proyectos={proyecto}></FilaDeTablaDeVideojuego>;
+                            })}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        );
+    }
+}
+
+export default Explore;*/
