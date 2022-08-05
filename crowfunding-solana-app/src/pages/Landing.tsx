@@ -13,18 +13,51 @@ interface TitleText {
 
 function Landing() {
 
-  let projects: ProjectMin[] = [
-    {
-      id: 1,
-      name: "Projectname",
-      description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Rutrum lectus dictum risus enim egestas.",
-      images: undefined,
-      solRaised: 123,
-      solGoal: 200,
-      dateLimit: new Date('2022-10-10'),
-      qPatrons: 123,
-    },
-  ]
+  let projects: ProjectMin[] = []
+
+  const [proyectos, setProyectos] = React.useState([{
+    id: 0,
+    ProjectName: '',
+    SolGoal: 0,
+    DateLimit: new Date(),
+  }]);
+  
+  React.useEffect(() => {
+    async function getProjects() {
+      const respuesta = await fetch(`http://localhost/obtenerUltimosProyectos.php?limite=${2}`);
+      const allProyectos = await respuesta.json();
+      console.log(allProyectos)
+      setProyectos(allProyectos)
+    }
+    getProjects();
+  }, [])
+
+  React.useEffect(() =>{  
+      changeListedProjects() 
+  },[proyectos])
+
+  function changeListedProjects(){
+    
+    let newProjects: ProjectMin[] = []
+    for(let i = 0; i < proyectos.length; i++){
+      newProjects.push({
+        id: proyectos[i].id,
+        name: proyectos[i].ProjectName,
+        description: "First Description",
+        images: undefined,
+        solRaised: 0, //Leer desde smart contract
+        solGoal: proyectos[i].SolGoal,
+        dateLimit: proyectos[i].DateLimit,
+        qPatrons: 1, //Leer desde smart contract
+        }) 
+    }
+    
+    setListedProjects(newProjects)
+    //projects = newProjects
+    //console.log("Changing listed projects")
+  }
+
+  const [listedProjects, setListedProjects] = React.useState(projects);
 
   const procSteps: TitleText[] = [
     {
@@ -119,7 +152,7 @@ function Landing() {
         Closing soon
       </Typography>
       <div className='row'>
-        {projects.map((p,i )=><ProjectCard {...p} key={i} />)}
+        {listedProjects.map((p,i )=><ProjectCard {...p} key={i} />)}
       </div>
       <Link href="/explore" fontWeight='bold' align='center'>
         Find more &nbsp;

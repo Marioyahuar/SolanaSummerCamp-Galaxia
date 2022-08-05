@@ -15,6 +15,18 @@ function obtenerProyectos()
     return $sentencia->fetchAll();
 }
 
+function crearNuevoProyecto(){
+    
+}
+
+function obtenerUltimosProyectos($limite)
+{
+    $bd = obtenerConexion();
+    $sentencia = $bd->query("SELECT * FROM projects1 ORDER by DateLimit DESC LIMIT $limite");
+    //$sentencia-> execute([$limite]);
+    return $sentencia->fetchAll();
+}
+
 function obtenerConexion()
 {
     $password = '';

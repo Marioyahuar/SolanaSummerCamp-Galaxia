@@ -10,58 +10,48 @@ function Explore( p : { sponsoring: boolean } ) {
     'Collections', 'P2E Games', 'Solutions'
   ]
 
-  //Leer algo de una base de datos:
-  
-  /*constructor(props) {
-      super(props);
-      this.state = {
-          proyectos: [],
-      };
-  }
-  
-  async componentDidMount() {
-      const respuesta = await fetch(`http://localhost/obtenerProyectos.php`);
-      const proyectos = await respuesta.json();
-      console.log(proyectos)
-      this.setState({
-          proyectos: proyectos,
-      });
-  }*/
-  
+  let projects: ProjectMin[] = []
 
-  let projects: ProjectMin[] = [
-    {
-      id: 1,
-      name: "Projectname1",
-      description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Rutrum lectus dictum risus enim egestas.",
-      images: undefined,
-      solRaised: 123,
-      solGoal: 200,
-      dateLimit: new Date('2022-10-10'),
-      qPatrons: 123,
-    }
-  ]
-
-  const [proyectos, setProyectos] = React.useState([]);
-  let test = true;
+  const [proyectos, setProyectos] = React.useState([{
+    id: 0,
+    ProjectName: '',
+    SolGoal: 0,
+    DateLimit: new Date(),
+  }]);
+  
   React.useEffect(() => {
     async function getProjects() {
       const respuesta = await fetch(`http://localhost/obtenerProyectos.php`);
       const allProyectos = await respuesta.json();
       setProyectos(allProyectos)
-      console.log(allProyectos)
-      
     }
     getProjects();
-}, [])
+  }, [])
 
-function changetest(){
+  React.useEffect(() =>{  
+      changeListedProjects() 
+  },[proyectos])
 
-  test = !test;
-  console.log(test);
-  console.log(proyectos)
-}
-  
+  function changeListedProjects(){
+    
+    let newProjects: ProjectMin[] = []
+    for(let i = 0; i < proyectos.length; i++){
+      newProjects.push({
+        id: proyectos[i].id,
+        name: proyectos[i].ProjectName,
+        description: "First Description",
+        images: undefined,
+        solRaised: 0, //Leer desde smart contract
+        solGoal: proyectos[i].SolGoal,
+        dateLimit: proyectos[i].DateLimit,
+        qPatrons: 1, //Leer desde smart contract
+        }) 
+    }
+    
+    setListedProjects(newProjects)
+    console.log("Changing listed projects")
+  }
+
   const [selectedCat, setSelectedCat] = React.useState(0);
   const [listedProjects, setListedProjects] = React.useState(projects);
   const handleCatChange = (event: React.SyntheticEvent, newValue: number) => {
@@ -85,7 +75,6 @@ function changetest(){
       <Tab label={c} key={i+1} />
       )}
     </Tabs>
-    <button onClick={changetest}> TEST </button>
     <div className='grid'>
     {
       listedProjects.length === 0 ? 
