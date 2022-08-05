@@ -3,7 +3,7 @@
 function obtenerProyectoPorId($id)
 {
     $bd = obtenerConexion();
-    $sentencia = $bd->prepare("SELECT ID, ProjectName, SolGoal, DateLimit FROM projects1 WHERE id = ?");
+    $sentencia = $bd->prepare("SELECT * FROM projects1 WHERE ID = ?");
     $sentencia->execute([$id]);
     return $sentencia->fetchObject();
 }

@@ -6,6 +6,7 @@ import { ProjectMin } from '../models/Project'
 
 function Explore( p : { sponsoring: boolean } ) {
 
+  //sponsoring? exploreSponsored : exploreNormal
   let categories : string[] = [
     'Collections', 'P2E Games', 'Solutions'
   ]
@@ -14,6 +15,7 @@ function Explore( p : { sponsoring: boolean } ) {
 
   const [proyectos, setProyectos] = React.useState([{
     ID: 0,
+    Category: '',
     ProjectName: '',
     SolGoal: 0,
     DateLimit: new Date(),
@@ -38,6 +40,7 @@ function Explore( p : { sponsoring: boolean } ) {
     for(let i = 0; i < proyectos.length; i++){
       newProjects.push({
         id: proyectos[i].ID,
+        category: proyectos[i].Category,
         name: proyectos[i].ProjectName,
         description: "First Description",
         images: undefined,
@@ -56,6 +59,7 @@ function Explore( p : { sponsoring: boolean } ) {
   const [listedProjects, setListedProjects] = React.useState(projects);
   const handleCatChange = (event: React.SyntheticEvent, newValue: number) => {
     setSelectedCat(newValue);
+    console.log("nuevo valor: " + newValue)
     setListedProjects(
       newValue === 0 ?
       projects : 
@@ -70,9 +74,9 @@ function Explore( p : { sponsoring: boolean } ) {
   <section className='column'>
 
     <Tabs value={selectedCat} onChange={handleCatChange} aria-label="categories">
-      <Tab label="All projects" key={0} />
+      <Tab label="All projects" key={0} value={0} />
       {categories.map((c,i)=>
-      <Tab label={c} key={i+1} />
+      <Tab value={i+1} label={c} key={i+1} />
       )}
     </Tabs>
     <div className='grid'>
@@ -90,56 +94,3 @@ function Explore( p : { sponsoring: boolean } ) {
 }
 
 export default Explore
-
-/*
-import React from 'react';
-//import Constantes from "./Constantes";
-//import { ToastContainer } from 'react-toastify';
-//import 'react-toastify/dist/ReactToastify.css';
-import FilaDeTablaDeVideojuego from './FilaDeTablaDeVideojuego';
-class Explore extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            proyectos: [],
-        };
-    }
-    async componentDidMount() {
-        const respuesta = await fetch(`http://localhost/obtenerProyectos.php`);
-        const proyectos = await respuesta.json();
-        console.log(proyectos)
-        this.setState({
-            proyectos: proyectos,
-        });
-    }
-    render() {
-        return (
-            <div>
-                <div className="column">
-                    <h1 className="is-size-3">Ver videojuegos</h1>
-                    
-                </div>
-                <div className="table-container">
-                    <table className="table is-fullwidth is-bordered">
-                        <thead>
-                            <tr>
-                                <th>Nombre</th>
-                                <th>Precio</th>
-                                <th>Calificación</th>
-                                <th>Editar</th>
-                                <th>Eliminar</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {this.state.proyectos.map(proyecto => {
-                                return <FilaDeTablaDeVideojuego key={proyecto.id} proyectos={proyecto}></FilaDeTablaDeVideojuego>;
-                            })}
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        );
-    }
-}
-
-export default Explore;*/

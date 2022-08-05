@@ -41,9 +41,74 @@ function a11yProps(index: number) {
 
 function Project() {
   //id del proyecto
-  const {projectId} = useParams();
-  //console.log("AAAAAAA " + projectId)
-  let project : ProjectFull = {
+  const {id} = useParams();
+  //console.log("Project ID: " + id)
+  
+  const [proyecto, setProyecto] = React.useState({
+    ID: 0,
+    ProjectName: '',
+    Description: '',
+    Images:'',
+    SolGoal: 0,
+    DateLimit: new Date(),
+    Twitter: '',
+    Discord: '',
+    Facebook:'',
+    Medium:'',
+    ReasonsToInvest:'',
+    LongDescription: '',
+    Risks:'',
+    Terms:'',
+    //Rewards:''
+  });
+  
+  React.useEffect(() => {
+    async function getProject() {
+      const respuesta = await fetch(`http://localhost/obtenerProyectoPorID.php?id=${id}`);
+      const getProyecto = await respuesta.json();
+      //console.log(getProyecto)
+      setProyecto(getProyecto)
+    }
+    getProject();
+  }, [id])
+
+  React.useEffect(() =>{  
+      changeListedProject() 
+  },[proyecto])
+
+  function changeListedProject(){
+    let newProject: ProjectFull = {
+      id: proyecto.ID,
+      name: proyecto.ProjectName,
+      description: proyecto.Description,
+      images: undefined, //Obtenerarreglo de imágenes y dividirlo
+      solRaised: 0, //Leer desde smart contract
+      solGoal: proyecto.SolGoal,
+      dateLimit: proyecto.DateLimit,
+      qPatrons: 1, //Leer desde smart contract
+      socialMedia:[
+        { media: 'TWITTER', url: proyecto.Twitter},
+        { media: 'DISCORD', url: proyecto.Discord},
+        { media: 'FACEBOOK', url: proyecto.Facebook},
+        { media: 'MEDIUM', url: proyecto.Medium},
+      ], //obtenerarreglo de urls y dividirlo
+      reasonsToInvest: proyecto.ReasonsToInvest.split(","), //obtener arreglo de strings y dividirlo
+      descriptionFull: proyecto.LongDescription,
+      team: {
+        name: '',
+        imgUrl: undefined,
+        description: ''
+      },
+      risks: proyecto.Risks,
+      termsAndConditions: proyecto.Terms
+    }
+    
+    setListedProject(newProject)
+    //projects = newProjects
+    //console.log(proyecto.ReasonsToInvest.split(","))
+  }
+
+  let initializeProject : ProjectFull = {
     category: 'COLLECTION',
     id: 1,
     name: 'ProjectName',
@@ -92,6 +157,8 @@ function Project() {
     ]
   };
 
+  const [project, setListedProject] = React.useState(initializeProject);
+
   //TABS
   const [selectedTab, setSelectedTab] = React.useState(0);
   const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
@@ -120,7 +187,7 @@ function Project() {
           project.socialMedia ?
           <Stack direction="row" spacing={0}>
             {
-            project.socialMedia?.map((sm, i)=>
+            project.socialMedia?.map((sm, i)=> sm.url? 
             <IconButton aria-label={sm.media} href={sm.url} target="_blank" key={i} color="inherit">
               {
               sm.media === 'TWITTER' ?
@@ -134,7 +201,7 @@ function Project() {
               : ''
               }
             </IconButton>
-            )}
+            :"")}
           </Stack>
           : ''
           }
@@ -201,16 +268,16 @@ function Project() {
 
         <TabPanel value={selectedTab} index={3}>
           <Typography variant="h4">Terms and conditions</Typography>
-          <Typography>{project.risks}</Typography>
+          <Typography>{project.termsAndConditions}</Typography>
         </TabPanel>
 
       </Grid>
 
       <Grid item lg={3} md={6} sm={8} id="support" component="aside" className='column'>
         <Typography variant="caption">SUPPORT</Typography>
-        <RewardCard projectId={parseInt(projectId??'') ?? 0} key={0}/>
+        <RewardCard projectId={parseInt(id??'') ?? 0} key={0}/>
         { project.rewards?.map((r, i)=>
-        <RewardCard projectId={parseInt(projectId??'') ?? 0} reward={r} key={i+1} />
+        <RewardCard projectId={parseInt(id??'') ?? 0} reward={r} key={i+1} />
         ) }
       </Grid>
 
