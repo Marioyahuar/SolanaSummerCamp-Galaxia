@@ -13,7 +13,7 @@ function Explore( p : { sponsoring: boolean } ) {
   let projects: ProjectMin[] = []
 
   const [proyectos, setProyectos] = React.useState([{
-    id: 0,
+    ID: 0,
     ProjectName: '',
     SolGoal: 0,
     DateLimit: new Date(),
@@ -37,7 +37,7 @@ function Explore( p : { sponsoring: boolean } ) {
     let newProjects: ProjectMin[] = []
     for(let i = 0; i < proyectos.length; i++){
       newProjects.push({
-        id: proyectos[i].id,
+        id: proyectos[i].ID,
         name: proyectos[i].ProjectName,
         description: "First Description",
         images: undefined,
@@ -49,7 +49,7 @@ function Explore( p : { sponsoring: boolean } ) {
     }
     
     setListedProjects(newProjects)
-    console.log("Changing listed projects")
+    console.log(listedProjects[0])
   }
 
   const [selectedCat, setSelectedCat] = React.useState(0);

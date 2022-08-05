@@ -42,7 +42,7 @@ function a11yProps(index: number) {
 function Project() {
   //id del proyecto
   const {projectId} = useParams();
-
+  //console.log("AAAAAAA " + projectId)
   let project : ProjectFull = {
     category: 'COLLECTION',
     id: 1,

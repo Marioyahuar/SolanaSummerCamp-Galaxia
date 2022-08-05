@@ -16,7 +16,7 @@ function Landing() {
   let projects: ProjectMin[] = []
 
   const [proyectos, setProyectos] = React.useState([{
-    id: 0,
+    ID: 0,
     ProjectName: '',
     SolGoal: 0,
     DateLimit: new Date(),
@@ -41,7 +41,7 @@ function Landing() {
     let newProjects: ProjectMin[] = []
     for(let i = 0; i < proyectos.length; i++){
       newProjects.push({
-        id: proyectos[i].id,
+        id: proyectos[i].ID,
         name: proyectos[i].ProjectName,
         description: "First Description",
         images: undefined,
