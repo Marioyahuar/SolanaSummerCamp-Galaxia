@@ -191,8 +191,10 @@ span.row {
   margin: 0px;
 }
 .grid {
-  gap: 1em;
+  width: 100%;
   align-items: flex-start;
+  justify-content: center;
+  gap: 1em;
 }
 
 /*  */

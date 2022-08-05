@@ -151,7 +151,7 @@ function Landing() {
       <Typography variant='h2' align='center' color='secondary'>
         Closing soon
       </Typography>
-      <div className='row'>
+      <div className='grid'>
         {listedProjects.map((p,i )=><ProjectCard {...p} key={i} />)}
       </div>
       <Link href="/explore" fontWeight='bold' align='center'>
