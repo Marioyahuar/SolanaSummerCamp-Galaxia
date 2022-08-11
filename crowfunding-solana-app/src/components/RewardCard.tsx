@@ -2,13 +2,20 @@ import React from 'react'
 import { Button, Divider, InputAdornment, Paper, Stack, TextField, Typography } from '@mui/material'
 import { Reward } from '../models/Reward'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faCheck, faClock, faCreditCard, faUserGroup } from '@fortawesome/free-solid-svg-icons'
+import { faCheck, faClock, faCreditCard, faSpinner, faUserGroup } from '@fortawesome/free-solid-svg-icons'
 import moment from 'moment'
 
 function RewardCard( p: { projectId:number, reward?:Reward } ) {
 
+  const [ state, setState ] = React.useState({label:'Patron', icon: faCheck });
+  const handleConnect = (event: React.SyntheticEvent) => {
+    setState({label:'Connecting...', icon: faSpinner });
+  };
+
+
   return (
-  <Paper className={"reward-card " + (p.reward ? '' : "border-gradient")} >
+  <Paper className={"reward-card "} >
+    {/* + (p.reward ? '' : "border-gradient") */}
 
     {p.reward ?
     <>
@@ -64,7 +71,7 @@ function RewardCard( p: { projectId:number, reward?:Reward } ) {
 
     <>
     <Typography variant="h3" className='gradient' align='center'>
-      Fre will
+      Free will
     </Typography>
     <Typography variant="body2" color="text.secondary" align='center'>
       Just because you believe in it.
@@ -90,8 +97,8 @@ function RewardCard( p: { projectId:number, reward?:Reward } ) {
         }}
       />
       <Button variant="contained" className='f-fill'
-        startIcon={<FontAwesomeIcon icon={faCheck} />}>
-        Patron
+        startIcon={<FontAwesomeIcon icon={state.icon} />}>
+        {state.label}
       </Button>
     </Stack>
 

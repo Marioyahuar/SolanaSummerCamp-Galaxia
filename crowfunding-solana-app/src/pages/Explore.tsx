@@ -92,7 +92,7 @@ function Explore( p : { sponsoring: boolean } ) {
     </div>
 
     <br />
-    <Pagination count={10} />
+    {/* <Pagination count={10} /> */}
   </section>
   )
 }
