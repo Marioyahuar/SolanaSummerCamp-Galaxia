@@ -46,6 +46,7 @@ function Project() {
   
   const [proyecto, setProyecto] = React.useState({
     ID: 0,
+    Category: '',
     ProjectName: '',
     Description: '',
     Images:'',
@@ -57,16 +58,16 @@ function Project() {
     Medium:'',
     ReasonsToInvest:'',
     LongDescription: '',
+    Team:'',
     Risks:'',
     Terms:'',
-    //Rewards:''
+    Rewards:''
   });
   
   React.useEffect(() => {
     async function getProject() {
       const respuesta = await fetch(`http://localhost/obtenerProyectoPorID.php?id=${id}`);
       const getProyecto = await respuesta.json();
-      //console.log(getProyecto)
       setProyecto(getProyecto)
     }
     getProject();
@@ -79,6 +80,7 @@ function Project() {
   function changeListedProject(){
     let newProject: ProjectFull = {
       id: proyecto.ID,
+      category: proyecto.Category,
       name: proyecto.ProjectName,
       description: proyecto.Description,
       images: undefined, //Obtenerarreglo de imágenes y dividirlo
@@ -93,19 +95,15 @@ function Project() {
         { media: 'MEDIUM', url: proyecto.Medium},
       ], //obtenerarreglo de urls y dividirlo
       reasonsToInvest: proyecto.ReasonsToInvest.split(","), //obtener arreglo de strings y dividirlo
-      descriptionFull: proyecto.LongDescription,
-      team: {
-        name: '',
-        imgUrl: undefined,
-        description: ''
-      },
+      descriptionFull: proyecto.LongDescription, 
+      team: proyecto.Team? JSON.parse(proyecto.Team) : {},
       risks: proyecto.Risks,
-      termsAndConditions: proyecto.Terms
+      termsAndConditions: proyecto.Terms,
+      rewards: proyecto.Rewards? JSON.parse(proyecto.Rewards) : []
     }
     
     setListedProject(newProject)
-    //projects = newProjects
-    //console.log(proyecto.ReasonsToInvest.split(","))
+    //console.log((proyecto.Rewards))
   }
 
   let initializeProject : ProjectFull = {

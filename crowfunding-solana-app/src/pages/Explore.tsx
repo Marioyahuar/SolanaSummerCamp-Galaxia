@@ -52,21 +52,25 @@ function Explore( p : { sponsoring: boolean } ) {
     }
     
     setListedProjects(newProjects)
-    console.log(listedProjects[0])
+    setFilteredProjects(newProjects)
+    //console.log(listedProjects[0])
   }
 
   const [selectedCat, setSelectedCat] = React.useState(0);
   const [listedProjects, setListedProjects] = React.useState(projects);
+  const[filteredProjects, setFilteredProjects] = React.useState(projects);
   const handleCatChange = (event: React.SyntheticEvent, newValue: number) => {
     setSelectedCat(newValue);
-    console.log("nuevo valor: " + newValue)
-    setListedProjects(
+    //changeListedProjects();
+    //console.log(listedProjects)
+    setFilteredProjects(
       newValue === 0 ?
-      projects : 
-        //si se listan todos solo basta esto
-        projects.filter(
-          p =>  p.category === categories[newValue-1]
-        )
+      listedProjects : 
+      //si se listan todos solo basta esto
+      listedProjects.filter(
+        p => { console.log("nuevo valor: " + p.category,newValue,categories[newValue-1]);
+          return p.category === categories[newValue-1]
+        })
     );
   };
 
@@ -74,16 +78,16 @@ function Explore( p : { sponsoring: boolean } ) {
   <section className='column'>
 
     <Tabs value={selectedCat} onChange={handleCatChange} aria-label="categories">
-      <Tab label="All projects" key={0} value={0} />
+      <Tab label="All projects" key={0} />
       {categories.map((c,i)=>
-      <Tab value={i+1} label={c} key={i+1} />
+      <Tab label={c} key={i+1} />
       )}
     </Tabs>
     <div className='grid'>
     {
-      listedProjects.length === 0 ? 
+      filteredProjects.length === 0 ? 
       <Typography align='center' paddingY="8em">0 projects yet.</Typography>
-      : listedProjects.map((p,i )=><ProjectCard {...p} key={i}/>)
+      : filteredProjects.map((p,i )=><ProjectCard {...p} key={i}/>)
     }
     </div>
 

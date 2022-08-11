@@ -11,7 +11,7 @@ function obtenerProyectoPorId($id)
 function obtenerProyectos()
 {
     $bd = obtenerConexion();
-    $sentencia = $bd->query("SELECT ID, ProjectName, SolGoal, DateLimit FROM projects1");
+    $sentencia = $bd->query("SELECT ID, Category, ProjectName, SolGoal, DateLimit FROM projects1");
     return $sentencia->fetchAll();
 }
 

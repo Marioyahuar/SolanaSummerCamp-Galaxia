@@ -26,7 +26,7 @@ function Landing() {
     async function getProjects() {
       const respuesta = await fetch(`http://localhost/obtenerUltimosProyectos.php?limite=${2}`);
       const allProyectos = await respuesta.json();
-      console.log(allProyectos)
+      //console.log(allProyectos)
       setProyectos(allProyectos)
     }
     getProjects();

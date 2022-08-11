@@ -1,4 +1,4 @@
-import React, {MouseEventHandler, useCallback} from 'react';
+import React, {MouseEventHandler, useCallback, useEffect} from 'react';
 import { useLocation } from 'react-router-dom';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
@@ -6,8 +6,30 @@ import { Button, Chip } from '@mui/material';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faArrowRightFromBracket, faArrowRightToBracket } from "@fortawesome/free-solid-svg-icons"
 import { WalletMultiButton, useWalletModal } from '@solana/wallet-adapter-react-ui';
-import { useConnection, useWallet } from '@solana/wallet-adapter-react';
+import { useConnection, useWallet, useAnchorWallet } from '@solana/wallet-adapter-react';
+import { Connection, PublicKey, clusterApiUrl } from '@solana/web3.js';
+import { AnchorError, AnchorProvider, Program, Provider, web3 } from '@project-serum/anchor';
+import idl from '../crowdfunding.json';
+import './use-wallet.ts'
 require('@solana/wallet-adapter-react-ui/styles.css');
+
+
+// SystemProgram is a reference to the Solana runtime!
+const { SystemProgram, Keypair } = web3;
+
+// Create a keypair for the account that will hold the GIF data.
+let baseAccount = Keypair.generate();
+
+// Get our program's id from the IDL file.
+const programID = new PublicKey(idl.metadata.address);
+
+// Set our network to devnet.
+const network = clusterApiUrl('devnet');
+
+// Controls how we want to acknowledge when a transaction is "done".
+const opts = {
+  preflightCommitment: "processed"
+}
 
 function a11yProps(index: number) {
   return {
@@ -27,6 +49,12 @@ function Header() {
                 : location.pathname === '/sponsoring' ? 1 : false;
   
   const [isLogged, setIsLogged] = React.useState(false);
+
+  React.useEffect(() => {
+    //console.log(isLogged)
+    //console.log(connected)
+    //console.log(publicKey?.toString())
+  }, [isLogged])
 
   const handleLogin = (event: React.SyntheticEvent) => {
     //setIsLogged(true);
@@ -48,12 +76,70 @@ function Header() {
     if (connecting) return 'Connecting ...';
     if (connected) {setIsLogged(true); return `${publicKey?.toString().slice(0,4) + "..." + publicKey?.toString().slice(-4)}`;}
     if (disconnecting) return 'Disconnecting ...';
-    if (wallet) return 'Connect';
+    if (wallet) {try{connect()}catch{console.log("error")};return 'Connect'};
     return 'Connect Wallet';
-}, [ connecting, connected, wallet]);
+  }, [ connecting, connected, wallet]);
+
+const endpoint = web3.clusterApiUrl('devnet')
+  //const wallet = new PhantomWalletAdapter()
+  const anchorwallet = useAnchorWallet()
+  
+  const getProvider = () => {
+    const connection = new Connection(network, opts.preflightCommitment as any);
+    const provider = new AnchorProvider(
+      connection, anchorwallet as any, opts.preflightCommitment as any,
+    )
+    /*if (publicKey && anchorwallet && connection) {
+      const provider = new Provider(connection, anchorwallet, {
+        preflightCommitment: "processed",
+      });*/
+    return provider;
+  }
+
+  const showProvider = async() => {
+    console.log(getProvider())
+  }
+  
+  const createAccount = async () => {
+    try {
+      const provider =  getProvider();
+      console.log(provider)
+      //const program = new Program(idl as any, programID, provider);
+      const program = new Program(idl as any, programID, provider);
+      console.log("ping")
+      await program.rpc.initialize({
+        accounts: {
+          baseAccount: baseAccount.publicKey,
+          user: provider.wallet.publicKey,
+          systemProgram: SystemProgram.programId,
+        },
+        signers: [baseAccount]
+      });
+      console.log("Created a new BaseAccount w/ address:", baseAccount.publicKey.toString())
+  
+    } catch(error) {
+      console.log("Error creating BaseAccount account:", error)
+    }
+  }
+
+  const GetAccount = async() => {
+    try{
+      const provider = getProvider();
+      const program = new Program(idl as any, programID, provider);
+      const account = await program.account.baseAccount.fetch(baseAccount.publicKey);
+      console.log("Got the account", account)
+    } catch(error){
+      console.log(error)
+    }
+  }
+//createAccount()
+  //console.log(getProvider())
+  
 
   return (
     <header className='row dark-mode'>
+      <Button onClick={showProvider}>GetAndShowProvider</Button>
+      <Button onClick={createAccount}>CreateAccount</Button>
       <a href="/"> <img src={process.env.PUBLIC_URL + "/logo.svg"} alt="logo"/> </a>
       <Tabs  value={currpage} aria-label="nav" className="f-fill">
         <Tab label="Explore" {...a11yProps(0)}    href="/explore" />

@@ -1,0 +1,21 @@
+//Reward
+[
+    {
+      "id": "0",
+      "name": "Reward1",
+      "minPrice": "150",
+      "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Rutrum lectus dictum risus enim egestas.",
+      "perksIncluded": [
+        "Lorem ipsum dolor sit amet."
+      ],
+      "estimatedDeliverDate": "new Date('2022-11-25')",
+      "patronsQuantity": "45"
+    }
+]
+
+//Team
+{
+    "name": "Team Name",
+    "imgUrl": "undefined",
+    "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Rutrum lectus dictum risus enim egestas. Quisque pharetra pellentesque sapien elementum ipsum euismod diam eget ut"
+}
