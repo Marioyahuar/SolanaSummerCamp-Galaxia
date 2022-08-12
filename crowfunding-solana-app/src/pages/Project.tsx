@@ -38,73 +38,30 @@ function a11yProps(index: number) {
 }
 // TAB PANEL CONTROL END
 
+interface fullProjectBD {
+  ID: number,
+  Category: string,
+  ProjectName: string,
+  Description: string,
+  Images: string,
+  SolGoal: number,
+  DateLimit: Date,
+  Twitter: string,
+  Discord: string,
+  Facebook:string,
+  Medium:string,
+  ReasonsToInvest:string,
+  LongDescription: string,
+  Team:string,
+  Risks:string,
+  Terms:string,
+  Rewards:string
+}
 
 function Project() {
   //id del proyecto
   const {id} = useParams();
   //console.log("Project ID: " + id)
-  
-  const [proyecto, setProyecto] = React.useState({
-    ID: 0,
-    Category: '',
-    ProjectName: '',
-    Description: '',
-    Images:'',
-    SolGoal: 0,
-    DateLimit: new Date(),
-    Twitter: '',
-    Discord: '',
-    Facebook:'',
-    Medium:'',
-    ReasonsToInvest:'',
-    LongDescription: '',
-    Team:'',
-    Risks:'',
-    Terms:'',
-    Rewards:''
-  });
-  
-  React.useEffect(() => {
-    async function getProject() {
-      const respuesta = await fetch(`http://localhost/obtenerProyectoPorID.php?id=${id}`);
-      const getProyecto = await respuesta.json();
-      setProyecto(getProyecto)
-    }
-    getProject();
-  }, [id])
-
-  React.useEffect(() =>{  
-      changeListedProject() 
-  },[proyecto])
-
-  function changeListedProject(){
-    let newProject: ProjectFull = {
-      id: proyecto.ID,
-      category: proyecto.Category,
-      name: proyecto.ProjectName,
-      description: proyecto.Description,
-      images: undefined, //Obtenerarreglo de imágenes y dividirlo
-      solRaised: 0, //Leer desde smart contract
-      solGoal: proyecto.SolGoal,
-      dateLimit: proyecto.DateLimit,
-      qPatrons: 1, //Leer desde smart contract
-      socialMedia:[
-        { media: 'TWITTER', url: proyecto.Twitter},
-        { media: 'DISCORD', url: proyecto.Discord},
-        { media: 'FACEBOOK', url: proyecto.Facebook},
-        { media: 'MEDIUM', url: proyecto.Medium},
-      ], //obtenerarreglo de urls y dividirlo
-      reasonsToInvest: proyecto.ReasonsToInvest.split(","), //obtener arreglo de strings y dividirlo
-      descriptionFull: proyecto.LongDescription, 
-      team: proyecto.Team? JSON.parse(proyecto.Team) : {},
-      risks: proyecto.Risks,
-      termsAndConditions: proyecto.Terms,
-      rewards: proyecto.Rewards? JSON.parse(proyecto.Rewards) : []
-    }
-    //console.log(newProject.dateLimit)
-    setListedProject(newProject)
-    //console.log((proyecto.Rewards))
-  }
 
   let initializeProject : ProjectFull = {
     category: 'COLLECTION',
@@ -155,7 +112,43 @@ function Project() {
     ]
   };
 
-  const [project, setListedProject] = React.useState(initializeProject);
+  const [project, setProject] = React.useState(initializeProject);
+  
+  React.useEffect(() => {
+    async function getProject() {
+      const respuesta = await fetch(`http://localhost/obtenerProyectoPorID.php?id=${id}`);
+      const getProyecto = await respuesta.json();
+      let proj = getProyecto.map( (p:fullProjectBD)=>{ return {
+        id: p.ID,
+        category: p.Category,
+        name: p.ProjectName,
+        description: p.Description,
+        images: undefined, //Obtenerarreglo de imágenes y dividirlo
+        solRaised: 0, //Leer desde smart contract
+        solGoal: p.SolGoal,
+        dateLimit: p.DateLimit,
+        qPatrons: 1, //Leer desde smart contract
+        socialMedia:[
+          { media: 'TWITTER', url: p.Twitter},
+          { media: 'DISCORD', url: p.Discord},
+          { media: 'FACEBOOK', url: p.Facebook},
+          { media: 'MEDIUM', url: p.Medium},
+        ], //obtenerarreglo de urls y dividirlo
+        reasonsToInvest: p.ReasonsToInvest.split(","), //obtener arreglo de strings y dividirlo
+        descriptionFull: p.LongDescription, 
+        team: p.Team? JSON.parse(p.Team) : {},
+        risks: p.Risks,
+        termsAndConditions: p.Terms,
+        rewards: p.Rewards? JSON.parse(p.Rewards) : []
+      }} )
+      setProject(proj);
+    }
+    if ( id!== undefined ) {
+      getProject();
+      console.log(id)
+    }
+  }, [id])
+  
 
   //TABS
   const [selectedTab, setSelectedTab] = React.useState(0);
