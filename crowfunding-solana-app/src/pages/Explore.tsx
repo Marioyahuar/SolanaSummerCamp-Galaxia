@@ -5,73 +5,66 @@ import { ProjectMin } from '../models/Project'
 import { useConnection, useWallet, useAnchorWallet } from '@solana/wallet-adapter-react';
 import { WalletReadyState } from '@solana/wallet-adapter-base';
 
+interface aProject {
+  ID: number,
+  Category: string,
+  ProjectName: string,
+  SolGoal: number,
+  DateLimit: Date
+}
 
 function Explore( p : { sponsoring: boolean } ) {
 
   //const { publicKey, wallet, connect, connecting, connected, disconnect, disconnecting } = useWallet(); //Leer publicKey en cualquier instancia
   //sponsoring? exploreSponsored : exploreNormal
+
+  const [proyectos, setProyectos] = React.useState<ProjectMin[]>([]);
+  const [filteredProjects, setFilteredProjects] = React.useState(proyectos);
+  const [projectIds, setProjectIds] = React.useState<number[]>([]);
+
+  async function getProjects(url:string) {
+    const respuesta = await fetch(url);
+    const allProyectos = await respuesta.json();
+    let newProjects = allProyectos.map( (p:aProject) => { return {
+      id: p.ID,
+      category: p.Category,
+      name: p.ProjectName,
+      description: "First Description",
+      images: undefined,
+      solRaised: 0, //Leer desde smart contract
+      solGoal: p.SolGoal,
+      dateLimit: p.DateLimit,
+      qPatrons: 1, //Leer desde smart contract
+    }});
+    setProyectos(newProjects);
+    setFilteredProjects(newProjects);
+  }
+  
+  React.useEffect(() => {
+    if (!p.sponsoring) {
+      console.log('explore');
+      getProjects(`http://localhost/obtenerProyectos.php`);
+    } else if (projectIds.length > 0) {
+      console.log('sponsoring');
+      getProjects(`http://localhost/obtenerProyectos.php`);
+      // El filter es innecesario si se llama al php correcto
+      let newProjects: ProjectMin[] = proyectos.filter( p => projectIds.includes(p.id) );
+      setProyectos(newProjects);
+      setFilteredProjects(newProjects);
+    }
+  }, [p.sponsoring, projectIds])
+
+  const [selectedCat, setSelectedCat] = React.useState(0);
   let categories : string[] = [
     'Collections', 'P2E Games', 'Solutions'
   ]
-
-  let projects: ProjectMin[] = []
-
-  const [proyectos, setProyectos] = React.useState([{
-    ID: 0,
-    Category: '',
-    ProjectName: '',
-    SolGoal: 0,
-    DateLimit: new Date(),
-  }]);
-  
-  React.useEffect(() => {
-    async function getProjects() {
-      const respuesta = await fetch(`http://localhost/obtenerProyectos.php`);
-      const allProyectos = await respuesta.json();
-      setProyectos(allProyectos)
-      
-    }
-    getProjects();
-  }, [])
-
-  React.useEffect(() =>{  
-      changeListedProjects() 
-  },[proyectos])
-
-  function changeListedProjects(){
-    
-    let newProjects: ProjectMin[] = []
-    for(let i = 0; i < proyectos.length; i++){
-      newProjects.push({
-        id: proyectos[i].ID,
-        category: proyectos[i].Category,
-        name: proyectos[i].ProjectName,
-        description: "First Description",
-        images: undefined,
-        solRaised: 0, //Leer desde smart contract
-        solGoal: proyectos[i].SolGoal,
-        dateLimit: proyectos[i].DateLimit,
-        qPatrons: 1, //Leer desde smart contract
-        }) 
-    }
-    
-    setListedProjects(newProjects)
-    setFilteredProjects(newProjects)
-    //console.log(listedProjects[0])
-  }
-
-  const [selectedCat, setSelectedCat] = React.useState(0);
-  const [listedProjects, setListedProjects] = React.useState(projects);
-  const[filteredProjects, setFilteredProjects] = React.useState(projects);
   const handleCatChange = (event: React.SyntheticEvent, newValue: number) => {
     setSelectedCat(newValue);
-    //changeListedProjects();
-    //console.log(listedProjects)
     setFilteredProjects(
       newValue === 0 ?
-      listedProjects : 
+      proyectos : 
       //si se listan todos solo basta esto
-      listedProjects.filter(
+      proyectos.filter(
         p => { console.log("nuevo valor: " + p.category,newValue,categories[newValue-1]);
           return p.category === categories[newValue-1]
         })
