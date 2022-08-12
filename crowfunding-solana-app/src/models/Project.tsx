@@ -8,7 +8,7 @@ interface ProjectMin {
   images?: {url:string, alt:string}[],
   solRaised: number,
   solGoal: number,
-  dateLimit: Date,
+  dateLimit?: Date,
   qPatrons: number,
   userRewards?: {name:string, complete:boolean}[]
 }
