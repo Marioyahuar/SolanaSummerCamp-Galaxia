@@ -2,10 +2,13 @@ import { Pagination, Tab, Tabs, Typography } from '@mui/material'
 import React from 'react'
 import ProjectCard from '../components/ProjectCard'
 import { ProjectMin } from '../models/Project'
+import { useConnection, useWallet, useAnchorWallet } from '@solana/wallet-adapter-react';
+import { WalletReadyState } from '@solana/wallet-adapter-base';
 
 
 function Explore( p : { sponsoring: boolean } ) {
 
+  //const { publicKey, wallet, connect, connecting, connected, disconnect, disconnecting } = useWallet(); //Leer publicKey en cualquier instancia
   //sponsoring? exploreSponsored : exploreNormal
   let categories : string[] = [
     'Collections', 'P2E Games', 'Solutions'
@@ -26,6 +29,7 @@ function Explore( p : { sponsoring: boolean } ) {
       const respuesta = await fetch(`http://localhost/obtenerProyectos.php`);
       const allProyectos = await respuesta.json();
       setProyectos(allProyectos)
+      
     }
     getProjects();
   }, [])
@@ -73,6 +77,12 @@ function Explore( p : { sponsoring: boolean } ) {
         })
     );
   };
+
+  //Leer public key en cualquier instancia
+  /*
+  React.useEffect(() => {
+    console.log(publicKey?.toString())
+  }, [publicKey])*/
 
   return (
   <section className='column'>

@@ -9,8 +9,13 @@ import { WalletMultiButton, useWalletModal } from '@solana/wallet-adapter-react-
 import { useConnection, useWallet, useAnchorWallet } from '@solana/wallet-adapter-react';
 import { Connection, PublicKey, clusterApiUrl } from '@solana/web3.js';
 import { AnchorError, AnchorProvider, Program, Provider, web3 } from '@project-serum/anchor';
-import idl from '../crowdfunding.json';
+//import idl from '../myepicproject.json';
+//import idl from '../crowdfunding.json';
+import idl from '../crowdfunding_basic.json';
 import './use-wallet.ts'
+import { WalletReadyState } from '@solana/wallet-adapter-base';
+import { Buffer } from 'buffer';
+window.Buffer = Buffer;
 require('@solana/wallet-adapter-react-ui/styles.css');
 
 
@@ -42,19 +47,20 @@ function Header() {
   const { connection } = useConnection();
   const { publicKey, wallet, connect, connecting, connected, disconnect, disconnecting } = useWallet();
   const { setVisible } = useWalletModal();
+  const [ locWallet, setLocWallet ] = React.useState(localStorage.getItem('solWallet'));
 
   const location = useLocation();
   // console.log(location.pathname);
   const currpage = location.pathname === '/explore'? 0
                 : location.pathname === '/sponsoring' ? 1 : false;
   
-  const [isLogged, setIsLogged] = React.useState(false);
+  //const [isLogged, setIsLogged] = React.useState(false);
 
-  React.useEffect(() => {
+  /*React.useEffect(() => {
     //console.log(isLogged)
     //console.log(connected)
     //console.log(publicKey?.toString())
-  }, [isLogged])
+  }, [isLogged])*/
 
   const handleLogin = (event: React.SyntheticEvent) => {
     //setIsLogged(true);
@@ -65,22 +71,33 @@ function Header() {
       connect();
     }
   };
+  
   const handleLogout = (event: React.SyntheticEvent) => {
     disconnect();
-    setIsLogged(false);
-  }
-  //let wallet = 'Pepito';
-  //this.user.ID.slice(0, 5) + "..." + this.user.ID.slice(-4);
+    setLocWallet(null);
+    localStorage.removeItem('solWallet')
+}
+  
   const content = React.useMemo(() => {
     //if (children) return children;
+    if (locWallet) { return locWallet };
     if (connecting) return 'Connecting ...';
-    if (connected) {setIsLogged(true); return `${publicKey?.toString().slice(0,4) + "..." + publicKey?.toString().slice(-4)}`;}
+    if (connected) {
+      let w = `${publicKey?.toString().slice(0,4) + "..." + publicKey?.toString().slice(-4)}`;
+      setLocWallet(w);
+      localStorage.setItem('solWallet', w);
+      return w;
+    }
     if (disconnecting) return 'Disconnecting ...';
-    if (wallet) {try{connect()}catch{console.log("error")};return 'Connect'};
+    //if (wallet) {try{connect()}catch{console.log("error")};return 'Connect'};
     return 'Connect Wallet';
   }, [ connecting, connected, wallet]);
 
-const endpoint = web3.clusterApiUrl('devnet')
+  React.useEffect(() => {
+    if (wallet) { try{connect()}catch{console.log("error connecting")}; }
+  }, [wallet?.readyState === WalletReadyState.Installed])
+
+  const endpoint = web3.clusterApiUrl('devnet')
   //const wallet = new PhantomWalletAdapter()
   const anchorwallet = useAnchorWallet()
   
@@ -106,7 +123,9 @@ const endpoint = web3.clusterApiUrl('devnet')
       console.log(provider)
       //const program = new Program(idl as any, programID, provider);
       const program = new Program(idl as any, programID, provider);
-      console.log("ping")
+      console.log("ping: ", programID.toString())
+      //console.log(SystemProgram.programId.toString())
+      console.log(program.programId.toString())
       await program.rpc.initialize({
         accounts: {
           baseAccount: baseAccount.publicKey,
@@ -132,25 +151,42 @@ const endpoint = web3.clusterApiUrl('devnet')
       console.log(error)
     }
   }
-//createAccount()
-  //console.log(getProvider())
+
+  const SendGif = async() => {
+    let inputValue = 'https://educacion30.b-cdn.net/wp-content/uploads/2019/06/homer.gif'
+    try {
+      const provider = getProvider();
+      const program = new Program(idl as any, programID, provider);
   
+      await program.rpc.addGif(inputValue, {
+        accounts: {
+          baseAccount: baseAccount.publicKey,
+          user: provider.wallet.publicKey,
+        },
+      });
+      console.log("GIF successfully sent to program", inputValue)
+  
+      //await getGifList();
+    } catch (error) {
+      console.log("Error sending GIF:", error)
+    }
+  }  
 
   return (
     <header className='row dark-mode'>
-      <Button onClick={showProvider}>GetAndShowProvider</Button>
+      <Button onClick={SendGif}>GetAndShowProvider</Button>
       <Button onClick={createAccount}>CreateAccount</Button>
       <a href="/"> <img src={process.env.PUBLIC_URL + "/logo.svg"} alt="logo"/> </a>
       <Tabs  value={currpage} aria-label="nav" className="f-fill">
         <Tab label="Explore" {...a11yProps(0)}    href="/explore" />
-        { isLogged ?
+        {  locWallet ?
           <Tab label="Sponsoring" {...a11yProps(1)} href="/sponsoring" />
           : ''
         }
       </Tabs>  
       
       {
-      isLogged ?
+       locWallet ?
       <Chip
         label={content}
         onDelete={handleLogout}

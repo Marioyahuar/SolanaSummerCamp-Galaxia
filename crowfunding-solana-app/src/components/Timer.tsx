@@ -16,8 +16,13 @@ function Timer( p: {dateLimit: Date} ) {
   };
   React.useEffect(()=>{
     setInterval(handleTick, 1000);
-  }, [diffTime.asMilliseconds() > -1]);
+    //console.log(diffTime)
+  });
 
+  React.useEffect(()=>{
+    console.log(p.dateLimit,dateLimit)
+  },[])
+//diffTime.asMilliseconds() > -1
   return (
     <div className='timer border-gradient'>
 
