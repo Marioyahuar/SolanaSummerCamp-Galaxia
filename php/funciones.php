@@ -8,8 +8,8 @@ function obtenerProyectoPorId($id)
     return $sentencia->fetchObject();
 }
 
-function obtenerProyectos()
-{
+function obtenerProyectos() //Arg = ID's a recuperar
+{   //La función debe devolver solo los proyectos que coincidan con los ID's 
     $bd = obtenerConexion();
     $sentencia = $bd->query("SELECT ID, Category, ProjectName, SolGoal, DateLimit FROM projects1");
     return $sentencia->fetchAll();
