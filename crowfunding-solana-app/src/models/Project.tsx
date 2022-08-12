@@ -1,5 +1,13 @@
 import { Reward } from "./Reward";
 
+interface ProjectBD {
+  ID: number,
+  Category?: string,
+  ProjectName: string,
+  SolGoal: number,
+  DateLimit: Date
+}
+
 interface ProjectMin {
   category?: string,
   id: number,
@@ -26,4 +34,4 @@ interface ProjectFull extends ProjectMin {
   rewards?: Reward[]
 }
 
-export type { ProjectMin, ProjectFull };
+export type { ProjectBD, ProjectMin, ProjectFull };

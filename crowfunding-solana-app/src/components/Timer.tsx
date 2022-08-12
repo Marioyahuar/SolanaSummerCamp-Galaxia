@@ -12,8 +12,8 @@ interface Duration {
 }
 
 function Timer( p: {dateLimit?: Date} ) {
-  
-  const [timeToDay , setTimeToDay] = React.useState({ dd:0, hh:0, mm:0, ss:0});
+  // const p: {dateLimit?: Date} = {dateLimit: new Date('2022-08-13')};
+  const [timeToDay , setTimeToDay] = React.useState<Duration>();
   
   const getTimeDiff = () => {
     if(p.dateLimit != undefined){
@@ -62,7 +62,7 @@ function Timer( p: {dateLimit?: Date} ) {
       </div>
 
       {
-        timeToDay.dd < 0 ?
+        (timeToDay === undefined || timeToDay.dd < 0) ?
         <Typography variant="h3">
           Time over!
         </Typography>

@@ -1,17 +1,9 @@
 import { Pagination, Tab, Tabs, Typography } from '@mui/material'
 import React from 'react'
 import ProjectCard from '../components/ProjectCard'
-import { ProjectMin } from '../models/Project'
+import { ProjectBD, ProjectMin } from '../models/Project'
 import { useConnection, useWallet, useAnchorWallet } from '@solana/wallet-adapter-react';
 import { WalletReadyState } from '@solana/wallet-adapter-base';
-
-interface aProject {
-  ID: number,
-  Category: string,
-  ProjectName: string,
-  SolGoal: number,
-  DateLimit: Date
-}
 
 function Explore( p : { sponsoring: boolean } ) {
 
@@ -25,7 +17,7 @@ function Explore( p : { sponsoring: boolean } ) {
   async function getProjects(url:string) {
     const respuesta = await fetch(url);
     const allProyectos = await respuesta.json();
-    let newProjects = allProyectos.map( (p:aProject) => { return {
+    let newProjects = allProyectos.map( (p:ProjectBD) => { return {
       id: p.ID,
       category: p.Category,
       name: p.ProjectName,
