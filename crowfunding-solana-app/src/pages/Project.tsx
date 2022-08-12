@@ -101,7 +101,7 @@ function Project() {
       termsAndConditions: proyecto.Terms,
       rewards: proyecto.Rewards? JSON.parse(proyecto.Rewards) : []
     }
-    
+    //console.log(newProject.dateLimit)
     setListedProject(newProject)
     //console.log((proyecto.Rewards))
   }
@@ -113,7 +113,7 @@ function Project() {
     description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Rutrum lectus dictum risus enim egestas.',
     solRaised: 123,
     solGoal: 200,
-    dateLimit: new Date('2022-10-25'),
+    dateLimit: undefined,
     qPatrons: 80,
     images: undefined,
     // [

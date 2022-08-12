@@ -11,27 +11,30 @@ interface Duration {
   ss: number,
 }
 
-function Timer( p: {dateLimit: Date} ) {
+function Timer( p: {dateLimit?: Date} ) {
+  // const p: {dateLimit?: Date} = {dateLimit: new Date('2022-08-13')};
+  const [timeToDay , setTimeToDay] = React.useState<Duration>();
   
-  const msDateLimit = p.dateLimit.getTime();
-  const [timeToDay , setTimeToDay] = React.useState({ dd:0, hh:0, mm:0, ss:0});
-
   const getTimeDiff = () => {
-    let now = new Date().getTime();
-    let timeDiff : number = msDateLimit - now;
-    console.log(p.dateLimit, msDateLimit, now, timeDiff);
-    setTimeToDay({
-      dd: Math.floor( timeDiff / 1000 / 60 / 60 / 24 ),
-      hh: Math.floor((timeDiff / 1000 / 60 / 60) % 24),
-      mm: Math.floor((timeDiff / 1000 / 60) % 60),
-      ss: Math.floor((timeDiff / 1000) % 60)
-    })
+    if(p.dateLimit != undefined){
+      let now = new Date().getTime();
+      const msDateLimit = new Date(p.dateLimit).getTime();
+      let timeDiff : number = msDateLimit - now;
+      console.log(p.dateLimit, msDateLimit, now, timeDiff);
+      setTimeToDay({
+        dd: Math.floor( timeDiff / 1000 / 60 / 60 / 24 ),
+        hh: Math.floor((timeDiff / 1000 / 60 / 60) % 24),
+        mm: Math.floor((timeDiff / 1000 / 60) % 60),
+        ss: Math.floor((timeDiff / 1000) % 60)
+      })
+    }
+    
   };
 
   React.useEffect(()=>{
     setInterval(getTimeDiff, 1000);
-  }, [timeToDay.dd > -2]);
-
+  });
+ //, [timeToDay.dd > -2]
   // const dateLimit = moment(p.dateLimit);
   // const [diffTime , setDiffTime] = React.useState(
   //   moment.duration( dateLimit.diff(new Date(), 'milliseconds') )
@@ -59,7 +62,7 @@ function Timer( p: {dateLimit: Date} ) {
       </div>
 
       {
-        timeToDay.dd < 0 ?
+        (timeToDay === undefined || timeToDay.dd < 0) ?
         <Typography variant="h3">
           Time over!
         </Typography>
