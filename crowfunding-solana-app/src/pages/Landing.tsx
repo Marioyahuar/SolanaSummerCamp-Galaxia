@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faDiscord, faFacebook, faTwitter } from '@fortawesome/free-brands-svg-icons';
 import { faAngleDown, faAngleRight } from '@fortawesome/free-solid-svg-icons';
 import ProjectCard from '../components/ProjectCard';
-import { ProjectMin } from '../models/Project';
+import { ProjectBD, ProjectMin } from '../models/Project';
 
 interface TitleText {
   title: string,
@@ -13,51 +13,27 @@ interface TitleText {
 
 function Landing() {
 
-  let projects: ProjectMin[] = []
-
-  const [proyectos, setProyectos] = React.useState([{
-    ID: 0,
-    ProjectName: '',
-    SolGoal: 0,
-    DateLimit: new Date(),
-  }]);
+  const [proyectos, setProyectos] = React.useState<ProjectMin[]>([]);
   
   React.useEffect(() => {
     async function getProjects() {
       const respuesta = await fetch(`http://localhost/obtenerUltimosProyectos.php?limite=${2}`);
       const allProyectos = await respuesta.json();
       //console.log(allProyectos)
-      setProyectos(allProyectos)
-    }
-    getProjects();
-  }, [])
-
-  React.useEffect(() =>{  
-      changeListedProjects() 
-  },[proyectos])
-
-  function changeListedProjects(){
-    
-    let newProjects: ProjectMin[] = []
-    for(let i = 0; i < proyectos.length; i++){
-      newProjects.push({
-        id: proyectos[i].ID,
-        name: proyectos[i].ProjectName,
+      let newProjects: ProjectMin[] = allProyectos.map((p:ProjectBD)=>{ return {
+        id: p.ID,
+        name: p.ProjectName,
         description: "First Description",
         images: undefined,
         solRaised: 0, //Leer desde smart contract
-        solGoal: proyectos[i].SolGoal,
-        dateLimit: proyectos[i].DateLimit,
+        solGoal: p.SolGoal,
+        dateLimit: p.DateLimit,
         qPatrons: 1, //Leer desde smart contract
-        }) 
+      }});
+      setProyectos(newProjects);
     }
-    
-    setListedProjects(newProjects)
-    //projects = newProjects
-    //console.log("Changing listed projects")
-  }
-
-  const [listedProjects, setListedProjects] = React.useState(projects);
+    getProjects();
+  }, []);
 
   const procSteps: TitleText[] = [
     {
@@ -152,7 +128,7 @@ function Landing() {
         Closing soon
       </Typography>
       <div className='grid'>
-        {listedProjects.map((p,i )=><ProjectCard {...p} key={i} />)}
+        {proyectos.map((p,i )=><ProjectCard {...p} key={i} />)}
       </div>
       <Link href="/explore" fontWeight='bold' align='center'>
         Find more &nbsp;
