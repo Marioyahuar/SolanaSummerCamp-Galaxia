@@ -6,12 +6,12 @@
       "name": "initialize",
       "accounts": [
         {
-          "name": "baseAccount",
+          "name": "authority",
           "isMut": true,
-          "isSigner": false
+          "isSigner": true
         },
         {
-          "name": "user",
+          "name": "crowdfunding",
           "isMut": true,
           "isSigner": true
         },
@@ -27,19 +27,19 @@
       "name": "createProject",
       "accounts": [
         {
-          "name": "baseAccount",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "newProject",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
           "name": "user",
           "isMut": true,
           "isSigner": true
+        },
+        {
+          "name": "crowdfunding",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "project",
+          "isMut": true,
+          "isSigner": false
         },
         {
           "name": "systemProgram",
@@ -49,20 +49,79 @@
       ],
       "args": [
         {
-          "name": "nameProject",
+          "name": "name",
           "type": "string"
+        },
+        {
+          "name": "goal",
+          "type": "u64"
+        },
+        {
+          "name": "timestamp",
+          "type": "u64"
+        }
+      ]
+    },
+    {
+      "name": "fundProject",
+      "accounts": [
+        {
+          "name": "user",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "projectAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "fundAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "amount",
+          "type": "u64"
         }
       ]
     }
   ],
   "accounts": [
     {
+      "name": "Crowdfunding",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "initialized",
+            "type": "bool"
+          },
+          {
+            "name": "authority",
+            "type": "publicKey"
+          },
+          {
+            "name": "totalProjects",
+            "type": "u64"
+          }
+        ]
+      }
+    },
+    {
       "name": "Project",
       "type": {
         "kind": "struct",
         "fields": [
           {
-            "name": "owner",
+            "name": "admin",
             "type": "publicKey"
           },
           {
@@ -74,27 +133,71 @@
             "type": "u64"
           },
           {
-            "name": "amountLamports",
+            "name": "fundGoal",
+            "type": "u64"
+          },
+          {
+            "name": "timestampGoalLimit",
+            "type": "u64"
+          },
+          {
+            "name": "totalFunds",
+            "type": "u64"
+          },
+          {
+            "name": "countFunds",
             "type": "u64"
           }
         ]
       }
     },
     {
-      "name": "BaseAccount",
+      "name": "Fund",
       "type": {
         "kind": "struct",
         "fields": [
           {
-            "name": "authority",
+            "name": "funder",
             "type": "publicKey"
           },
           {
-            "name": "totalProjects",
+            "name": "projectId",
+            "type": "u64"
+          },
+          {
+            "name": "amountFunded",
             "type": "u64"
           }
         ]
       }
+    },
+    {
+      "name": "FundPool",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "owner",
+            "type": "publicKey"
+          },
+          {
+            "name": "projectId",
+            "type": "u64"
+          }
+        ]
+      }
+    }
+  ],
+  "errors": [
+    {
+      "code": 6000,
+      "name": "NameTooLong",
+      "msg": "El nombre del proyecto no puede tener mas de 30 caracteres"
+    },
+    {
+      "code": 6001,
+      "name": "CrowdfundingAlreadyInicialized",
+      "msg": "Ya esta inicializado crowdfunding"
     }
   ],
   "metadata": {

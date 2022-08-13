@@ -118,7 +118,7 @@ function Project() {
     async function getProject() {
       const respuesta = await fetch(`http://localhost/obtenerProyectoPorID.php?id=${id}`);
       const p = await respuesta.json();
-      let proj = {
+      let proj : ProjectFull = {
         id: p.ID,
         category: p.Category,
         name: p.ProjectName,

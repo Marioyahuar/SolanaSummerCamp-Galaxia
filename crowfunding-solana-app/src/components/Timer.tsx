@@ -62,7 +62,8 @@ function Timer( p: {dateLimit?: Date} ) {
       </div>
 
       {
-        (timeToDay === undefined || timeToDay.dd < 0) ?
+        timeToDay === undefined ? ''
+        : timeToDay.dd < 0 ?
         <Typography variant="h3">
           Time over!
         </Typography>

@@ -10,20 +10,21 @@ import { useConnection, useWallet, useAnchorWallet } from '@solana/wallet-adapte
 import { Connection, PublicKey, clusterApiUrl } from '@solana/web3.js';
 import { AnchorError, AnchorProvider, Program, Provider, web3 } from '@project-serum/anchor';
 //import idl from '../myepicproject.json';
-//import idl from '../crowdfunding.json';
-import idl from '../crowdfunding_basic.json';
+import idl from '../crowdfunding.json';
+//import idl from '../crowdfunding_basic.json';
 import './use-wallet.ts'
 import { WalletReadyState } from '@solana/wallet-adapter-base';
 import { Buffer } from 'buffer';
 window.Buffer = Buffer;
 require('@solana/wallet-adapter-react-ui/styles.css');
 
-
+const anchor = require('@project-serum/anchor')
 // SystemProgram is a reference to the Solana runtime!
 const { SystemProgram, Keypair } = web3;
 
 // Create a keypair for the account that will hold the GIF data.
 let baseAccount = Keypair.generate();
+let projectAccount = Keypair.generate();
 
 // Get our program's id from the IDL file.
 const programID = new PublicKey(idl.metadata.address);
@@ -128,8 +129,8 @@ function Header() {
       console.log(program.programId.toString())
       await program.rpc.initialize({
         accounts: {
-          baseAccount: baseAccount.publicKey,
-          user: provider.wallet.publicKey,
+          crowdfunding: baseAccount.publicKey, //baseaccount
+          authority: provider.wallet.publicKey, //user
           systemProgram: SystemProgram.programId,
         },
         signers: [baseAccount]
@@ -145,37 +146,45 @@ function Header() {
     try{
       const provider = getProvider();
       const program = new Program(idl as any, programID, provider);
-      const account = await program.account.baseAccount.fetch(baseAccount.publicKey);
+      const account = await program.account.crowdfunding.all() //fetch(baseAccount.publicKey)
+      const publick = account[0].publicKey
+      const authority = await program.account.crowdfunding
       console.log("Got the account", account)
+      console.log("Got crowdfunding", publick.toString())
     } catch(error){
       console.log(error)
     }
   }
 
-  const SendGif = async() => {
-    let inputValue = 'https://educacion30.b-cdn.net/wp-content/uploads/2019/06/homer.gif'
+  const CreateProject = async() => {
+    let name = 'FirstProject'
+    let goal = new anchor.BN(100) 
+    let limit = new anchor.BN(100000)
     try {
       const provider = getProvider();
       const program = new Program(idl as any, programID, provider);
   
-      await program.rpc.addGif(inputValue, {
+      await program.rpc.createProject(name,goal,limit,{
         accounts: {
-          baseAccount: baseAccount.publicKey,
           user: provider.wallet.publicKey,
+          crowdfunding: baseAccount.publicKey, 
+          project: projectAccount.publicKey, 
+          systemProgram: SystemProgram.programId,
         },
+        signers: []
       });
-      console.log("GIF successfully sent to program", inputValue)
+      //console.log("GIF successfully sent to program", inputValue)
   
       //await getGifList();
     } catch (error) {
-      console.log("Error sending GIF:", error)
+      console.log("Error creating project: ", error)
     }
   }  
 
   return (
     <header className='row dark-mode'>
-      <Button onClick={SendGif}>GetAndShowProvider</Button>
-      <Button onClick={createAccount}>CreateAccount</Button>
+      <Button onClick={createAccount}>GetAndShowProvider</Button>
+      <Button onClick={CreateProject}>CreateAccount</Button>
       <a href="/"> <img src={process.env.PUBLIC_URL + "/logo.svg"} alt="logo"/> </a>
       <Tabs  value={currpage} aria-label="nav" className="f-fill">
         <Tab label="Explore" {...a11yProps(0)}    href="/explore" />
