@@ -117,8 +117,8 @@ function Project() {
   React.useEffect(() => {
     async function getProject() {
       const respuesta = await fetch(`http://localhost/obtenerProyectoPorID.php?id=${id}`);
-      const getProyecto = await respuesta.json();
-      let proj = getProyecto.map( (p:fullProjectBD)=>{ return {
+      const p = await respuesta.json();
+      let proj = {
         id: p.ID,
         category: p.Category,
         name: p.ProjectName,
@@ -140,7 +140,7 @@ function Project() {
         risks: p.Risks,
         termsAndConditions: p.Terms,
         rewards: p.Rewards? JSON.parse(p.Rewards) : []
-      }} )
+      }
       setProject(proj);
     }
     if ( id!== undefined ) {
