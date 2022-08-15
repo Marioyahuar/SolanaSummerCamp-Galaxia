@@ -1,5 +1,5 @@
 import React from 'react'
-import { Button, Divider, InputAdornment, Paper, Stack, TextField, Typography } from '@mui/material'
+import { Button, Chip, Divider, InputAdornment, Paper, Stack, TextField, Typography } from '@mui/material'
 import { Reward } from '../models/Reward'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCheck, faClock, faCreditCard, faSpinner, faUserGroup } from '@fortawesome/free-solid-svg-icons'
@@ -9,23 +9,25 @@ import { useConnection, useWallet } from '@solana/wallet-adapter-react'
 import { LAMPORTS_PER_SOL } from '@solana/web3.js'
 import * as buffer from "buffer";
 
+const states = [
+  {label:'Patron', icon: faCheck },
+  {label:'Connecting...', icon: faSpinner },
+  {label:'Patronized', icon: faCheck }
+]
+
 function RewardCard( p: { projectId:number, reward?:Reward } ) {
 
-  const [ state, setState ] = React.useState({label:'Patron', icon: faCheck });
-  const handleConnect = (event: React.SyntheticEvent) => {
-    setState({label:'Connecting...', icon: faSpinner });
-  };
+  const [ state, setState ] = React.useState(states[0]);
 
   const testF = () =>{ 
     console.log("testing reward button")
     console.log(p.projectId)
-    
   }
 
   const { connection } = useConnection()
   const { publicKey, sendTransaction } = useWallet()
 
-  const [amountToSend, setAmountToSend] = React.useState(0)
+  const [amountToSend, setAmountToSend] = React.useState( p.reward ? p.reward.minPrice : 0 );
   const [addresToSend, setAddressToSend] = React.useState('')
 
   React.useEffect(() => {
@@ -33,6 +35,8 @@ function RewardCard( p: { projectId:number, reward?:Reward } ) {
       const respuesta = await fetch(`http://localhost/obtenerProjectOwner.php?id=${p.projectId}`);
       const owner = await respuesta.json();
       setAddressToSend(owner.ProjectOwner);
+      //detectar si ya ha sido patrocinado por user. si lo es:
+      if (true) setState(states[2]);
     }
     if ( p.projectId!== undefined ) {
       getProject();
@@ -46,7 +50,11 @@ function RewardCard( p: { projectId:number, reward?:Reward } ) {
 
   const sendSol = (event: React.SyntheticEvent) => {
     event.preventDefault()
-    if (!connection || !publicKey) { return }
+    if (!connection || !publicKey) {
+      alert('To support, a wallet is needed.');
+      return
+    }
+    setState(states[1]);
     const transaction = new web3.Transaction()
     const recipientPubKey = new web3.PublicKey(addresToSend)
 
@@ -78,6 +86,7 @@ function RewardCard( p: { projectId:number, reward?:Reward } ) {
         body: cargaUtil,
     });
     const exitoso = await respuesta.json();
+    setState(states[2]);
     console.log(exitoso)
   }
 
@@ -92,7 +101,7 @@ function RewardCard( p: { projectId:number, reward?:Reward } ) {
         {p.reward.name}
       </Typography>
       <Typography variant='h5' align='center'>
-        {p.reward.minPrice} SOL +
+        {p.reward.minPrice} SOL
       </Typography>
     </div>
     <Typography variant="body2" color="text.secondary">
@@ -108,31 +117,50 @@ function RewardCard( p: { projectId:number, reward?:Reward } ) {
       </Typography>
       )}
     </ul>
-    <Stack
-      direction="row"
-      justifyContent="space-between"
-      divider={<Divider orientation="vertical" flexItem />}
-      spacing={1}
-    >
-      <div>
-        <Typography variant="body2" fontWeight="bold">
-          Estimated deliver date
-        </Typography>
-        <Typography component="span" className="row f-fill">
-          <FontAwesomeIcon icon={faClock} />
-          {moment(p.reward.estimatedDeliverDate).format("YYYY/MM/DD")}
-        </Typography>
-      </div>
-      <div>
-        <Typography variant="body2" fontWeight="bold">
-          Patrons
-        </Typography>
-        <Typography component="span" className="row f-fill">
-          <FontAwesomeIcon icon={faUserGroup} />
-          {p.reward.patronsQuantity}
-        </Typography>
-      </div>
-    </Stack>
+    <div>
+      <Typography variant="body2" fontWeight="bold">
+        Estimated deliver date
+      </Typography>
+      <Typography component="span" className="row f-fill">
+        <FontAwesomeIcon icon={faClock} />
+        {moment(p.reward.estimatedDeliverDate).format("YYYY/MM/DD")}
+      </Typography>
+    </div>
+    
+    <div>
+      <Typography variant="body2" fontWeight="bold">
+        Patrons
+      </Typography>
+      <Stack
+        direction="row"
+        justifyContent="space-between"
+        alignItems="flex-end"
+        spacing={1}
+      >
+        <div>
+          <Typography component="span" className="row f-fill">
+            <FontAwesomeIcon icon={faUserGroup} />
+            {p.reward.patronsQuantity}
+            <Chip label={p.reward.stock ?
+              (p.reward.stock - p.reward.patronsQuantity) + ' left'
+              : ' Unlimited'
+            } />
+          </Typography>
+        </div>
+        {state === states[2] ?
+        <>
+          <Chip label={state.label} color="success"
+          avatar={<FontAwesomeIcon icon={state.icon} />}/>
+        </>
+        :
+        <Button variant="contained" className={'f-fill'}
+          onClick={sendSol} disabled={state === states[2]}
+          startIcon={<FontAwesomeIcon icon={state.icon} />}>
+          {state.label}
+        </Button>
+        }
+      </Stack>
+    </div>
     </>
 
     :
@@ -144,10 +172,6 @@ function RewardCard( p: { projectId:number, reward?:Reward } ) {
     <Typography variant="body2" color="text.secondary" align='center'>
       Just because you believe in it.
     </Typography>
-    </>
-    }
-
-
     <Stack
       direction="row"
       justifyContent="space-between"
@@ -163,13 +187,15 @@ function RewardCard( p: { projectId:number, reward?:Reward } ) {
           <InputAdornment position="end">
             <FontAwesomeIcon icon={faCreditCard} />
           </InputAdornment>
-        }}
-      />
+        }}/>
+
       <Button variant="contained" className='f-fill' onClick={sendSol}
         startIcon={<FontAwesomeIcon icon={state.icon} />}>
         {state.label}
       </Button>
     </Stack>
+    </>
+    }
 
   </Paper>
   )

@@ -6,6 +6,7 @@ interface Reward {
   perksIncluded: string[],
   estimatedDeliverDate: Date,
   patronsQuantity: number,
+  stock?: number,
 }
 
 export type { Reward };
