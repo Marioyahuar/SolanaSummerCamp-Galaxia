@@ -9,7 +9,7 @@ function Explore( p : { sponsoring: boolean } ) {
 
   //const { publicKey, wallet, connect, connecting, connected, disconnect, disconnecting } = useWallet(); //Leer publicKey en cualquier instancia
   //sponsoring? exploreSponsored : exploreNormal
-
+  const { publicKey, sendTransaction } = useWallet()
   const [proyectos, setProyectos] = React.useState<ProjectMin[]>([]);
   const [filteredProjects, setFilteredProjects] = React.useState(proyectos);
   const [projectIds, setProjectIds] = React.useState<number[]>([]);
@@ -31,17 +31,34 @@ function Explore( p : { sponsoring: boolean } ) {
     setProyectos(newProjects);
     setFilteredProjects(newProjects);
   }
-  
+
+  async function getProjectIds(url:string){
+    const respuesta = await fetch(url)
+    const allids = await respuesta.json()
+    setProjectIds(allids)
+    //console.log(projectIds)
+  }
+  //${publicKey.toString()}
+
+  React.useEffect(() => {
+    //console.log(`hola${publicKey?.toString()}`)
+    if(publicKey !== null){
+      let user = publicKey.toString()
+      getProjectIds(`http://localhost/obtenerProyectosPatrocinados.php?user='${user}'`)} //obtenerProyectosPatrocinados.php?user=
+      
+  }, [publicKey])
+
   React.useEffect(() => {
     if (!p.sponsoring) {
-      console.log('explore');
+      //console.log('explore');
       getProjects(`http://localhost/obtenerProyectos.php`);
     } else if (projectIds.length > 0) {
-      console.log('sponsoring');
+      //console.log('sponsoring');
       getProjects(`http://localhost/obtenerProyectos.php`);
       // El filter es innecesario si se llama al php correcto
+      console.log(projectIds)
       let newProjects: ProjectMin[] = proyectos.filter( p => projectIds.includes(p.id) );
-      setProyectos(newProjects);
+      //setProyectos(newProjects);
       setFilteredProjects(newProjects);
     }
   }, [p.sponsoring, projectIds])

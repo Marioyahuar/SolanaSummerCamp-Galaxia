@@ -37,6 +37,14 @@ function obtenerUltimosProyectos($limite)
     return $sentencia->fetchAll();
 }
 
+function obtenerProyectosPatrocinados($user)
+{
+    $bd = obtenerConexion();
+    $sentencia = $bd->query("SELECT ProjectId FROM donations WHERE User= $user");
+    //$sentencia->execute([$user]);
+    return $sentencia->fetchAll();
+}
+
 function obtenerConexion()
 {
     $password = '';

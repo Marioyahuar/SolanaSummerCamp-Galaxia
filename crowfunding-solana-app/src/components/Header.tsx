@@ -180,11 +180,11 @@ function Header() {
       console.log("Error creating project: ", error)
     }
   }  
+  //<Button onClick={createAccount}>GetAndShowProvider</Button>
+  //<Button onClick={CreateProject}>CreateAccount</Button>
 
   return (
     <header className='row dark-mode'>
-      <Button onClick={createAccount}>GetAndShowProvider</Button>
-      <Button onClick={CreateProject}>CreateAccount</Button>
       <a href="/"> <img src={process.env.PUBLIC_URL + "/logo.svg"} alt="logo"/> </a>
       <Tabs  value={currpage} aria-label="nav" className="f-fill">
         <Tab label="Explore" {...a11yProps(0)}    href="/explore" />

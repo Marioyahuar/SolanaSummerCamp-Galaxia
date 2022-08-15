@@ -16,12 +16,6 @@ function RewardCard( p: { projectId:number, reward?:Reward } ) {
     setState({label:'Connecting...', icon: faSpinner });
   };
 
-  const testF = () =>{ 
-    console.log("testing reward button")
-    console.log(p.projectId)
-    
-  }
-
   const { connection } = useConnection()
   const { publicKey, sendTransaction } = useWallet()
 
