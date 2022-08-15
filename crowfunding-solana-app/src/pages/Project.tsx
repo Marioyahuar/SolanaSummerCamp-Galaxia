@@ -145,7 +145,7 @@ function Project() {
     }
     if ( id!== undefined ) {
       getProject();
-      console.log(id)
+      //console.log(id)
     }
   }, [id])
   

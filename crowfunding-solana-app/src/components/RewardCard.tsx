@@ -18,18 +18,30 @@ function RewardCard( p: { projectId:number, reward?:Reward } ) {
 
   const testF = () =>{ 
     console.log("testing reward button")
+    console.log(p.projectId)
+    
   }
 
   const { connection } = useConnection()
   const { publicKey, sendTransaction } = useWallet()
 
   const [amountToSend, setAmountToSend] = React.useState(0)
-  const [addresToSend, setAddressToSend] = React.useState('4sgJSUKJLBpnw7kUdNFWCK6EZqtkB3MXooHcFJYbPY8v')
+  const [addresToSend, setAddressToSend] = React.useState('')
+
+  React.useEffect(() => {
+    async function getProject() {
+      const respuesta = await fetch(`http://localhost/obtenerProjectOwner.php?id=${p.projectId}`);
+      const owner = await respuesta.json();
+      setAddressToSend(owner.ProjectOwner);
+    }
+    if ( p.projectId!== undefined ) {
+      getProject();
+    }
+  }, [p.projectId])
 
   function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
     const value = event.target.value
     setAmountToSend(value as any)
-    console.log(event.target, value)
   }
 
   const sendSol = (event: React.SyntheticEvent) => {
@@ -47,9 +59,27 @@ function RewardCard( p: { projectId:number, reward?:Reward } ) {
     transaction.add(sendSolInstruction);
     sendTransaction(transaction, connection).then(sig => {
         console.log(sig)
+        if(p.reward !== undefined){
+          const newDonation = {
+            User: publicKey.toString(),
+            TxHash: sig.toString(),
+            ProjectId: p.projectId,
+            RewardId: p.reward.id
+          }
+          sendDonation(newDonation)
+        }
     })
   }
   
+  const sendDonation = async (input: any) => {
+    const cargaUtil = JSON.stringify(input);
+    const respuesta = await fetch(`http://localhost/crearPatrocinio.php`, {
+        method: "POST",
+        body: cargaUtil,
+    });
+    const exitoso = await respuesta.json();
+    console.log(exitoso)
+  }
 
   return (
   <Paper className={"reward-card "} >

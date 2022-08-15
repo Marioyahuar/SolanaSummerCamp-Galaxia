@@ -8,6 +8,14 @@ function obtenerProyectoPorId($id)
     return $sentencia->fetchObject();
 }
 
+function obtenerProjectOwnerPorId($id)
+{
+    $bd = obtenerConexion();
+    $sentencia = $bd->prepare("SELECT ProjectOwner FROM projects1 WHERE ID = ?");
+    $sentencia->execute([$id]);
+    return $sentencia->fetchObject();
+}
+
 function obtenerProyectos() //Arg = ID's a recuperar
 {   //La función debe devolver solo los proyectos que coincidan con los ID's 
     $bd = obtenerConexion();
@@ -15,8 +23,10 @@ function obtenerProyectos() //Arg = ID's a recuperar
     return $sentencia->fetchAll();
 }
 
-function crearNuevoProyecto(){
-    
+function crearNuevoPatrocinio($donation){
+    $bd = obtenerConexion();
+    $sentencia = $bd->prepare("INSERT INTO donations(User, TxHash, ProjectId, RewardId) VALUES (?, ?, ?, ?)");
+    return $sentencia->execute([$donation->User, $donation->TxHash, $donation->ProjectId, $donation->RewardId]);
 }
 
 function obtenerUltimosProyectos($limite)
