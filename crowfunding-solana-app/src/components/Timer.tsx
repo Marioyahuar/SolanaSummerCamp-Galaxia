@@ -20,7 +20,7 @@ function Timer( p: {dateLimit?: Date} ) {
       let now = new Date().getTime();
       const msDateLimit = new Date(p.dateLimit).getTime();
       let timeDiff : number = msDateLimit - now;
-      console.log(p.dateLimit, msDateLimit, now, timeDiff);
+      //console.log(p.dateLimit, msDateLimit, now, timeDiff);
       setTimeToDay({
         dd: Math.floor( timeDiff / 1000 / 60 / 60 / 24 ),
         hh: Math.floor((timeDiff / 1000 / 60 / 60) % 24),

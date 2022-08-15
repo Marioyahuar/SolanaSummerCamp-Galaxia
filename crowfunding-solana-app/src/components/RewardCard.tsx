@@ -4,6 +4,10 @@ import { Reward } from '../models/Reward'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCheck, faClock, faCreditCard, faSpinner, faUserGroup } from '@fortawesome/free-solid-svg-icons'
 import moment from 'moment'
+import * as web3 from '@solana/web3.js'
+import { useConnection, useWallet } from '@solana/wallet-adapter-react'
+import { LAMPORTS_PER_SOL } from '@solana/web3.js'
+import * as buffer from "buffer";
 
 function RewardCard( p: { projectId:number, reward?:Reward } ) {
 
@@ -12,6 +16,40 @@ function RewardCard( p: { projectId:number, reward?:Reward } ) {
     setState({label:'Connecting...', icon: faSpinner });
   };
 
+  const testF = () =>{ 
+    console.log("testing reward button")
+  }
+
+  const { connection } = useConnection()
+  const { publicKey, sendTransaction } = useWallet()
+
+  const [amountToSend, setAmountToSend] = React.useState(0)
+  const [addresToSend, setAddressToSend] = React.useState('4sgJSUKJLBpnw7kUdNFWCK6EZqtkB3MXooHcFJYbPY8v')
+
+  function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
+    const value = event.target.value
+    setAmountToSend(value as any)
+    console.log(event.target, value)
+  }
+
+  const sendSol = (event: React.SyntheticEvent) => {
+    event.preventDefault()
+    if (!connection || !publicKey) { return }
+    const transaction = new web3.Transaction()
+    const recipientPubKey = new web3.PublicKey(addresToSend)
+
+    const sendSolInstruction = web3.SystemProgram.transfer({
+        fromPubkey: publicKey,
+        toPubkey: recipientPubKey,
+        lamports: LAMPORTS_PER_SOL * amountToSend
+    })
+
+    transaction.add(sendSolInstruction);
+    sendTransaction(transaction, connection).then(sig => {
+        console.log(sig)
+    })
+  }
+  
 
   return (
   <Paper className={"reward-card "} >
@@ -89,6 +127,7 @@ function RewardCard( p: { projectId:number, reward?:Reward } ) {
       <TextField variant="filled"
         label="Contribute (SOL)"
         name="SOL"
+        onChange={handleChange}
         InputProps={{
           endAdornment:
           <InputAdornment position="end">
@@ -96,7 +135,7 @@ function RewardCard( p: { projectId:number, reward?:Reward } ) {
           </InputAdornment>
         }}
       />
-      <Button variant="contained" className='f-fill'
+      <Button variant="contained" className='f-fill' onClick={sendSol}
         startIcon={<FontAwesomeIcon icon={state.icon} />}>
         {state.label}
       </Button>
