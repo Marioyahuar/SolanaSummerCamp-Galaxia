@@ -129,7 +129,9 @@ a.btn {
 a, button, summary {
   cursor: pointer;
 }
-
+.MuiButton-root:disabled {
+  box-shadow: none;
+}
 
 /*  */
 .row, .column, .grid {
@@ -420,6 +422,9 @@ details > div {
   justify-content: stretch;
   align-items: stretch;
   gap: 1em;
+}
+.reward-card button {
+  align-self: center;
 }
 
 /*  */
