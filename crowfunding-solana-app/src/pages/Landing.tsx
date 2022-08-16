@@ -37,35 +37,47 @@ function Landing() {
 
   const procSteps: TitleText[] = [
     {
-      title: "Connect Wallet",
+      title: "Connect Phantom Wallet",
       text: "Choose a Solana wallet"
     },
     {
-      title: "Explore projects",
-      text: "Check the projects of your interest."
+      title: "Explore Projects",
+      text: "Check the projects of your interest and find your favourite."
     },
     {
-      title: "Patron a project",
-      text: "Choose your reward and submit your payment."
+      title: "Patron a Project",
+      text: "Choose your reward, submit your payment and patronize it!"
+    },
+    {
+      title: "Find your Sponsorships",
+      text: "You'll be able to check your sponsored projects on the 'sponsored' tab."
     },
   ]
 
   const faqs: TitleText[] = [
     {
-      title: "Question1?",
-      text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse malesuada lacus ex, sit amet blandit leo lobortis eget."
+      title: "Who uses Galaxia?",
+      text: "Galaxia is the perfect platform for any person who want to know and sponsor innovative Solana projects."
     },
     {
-      title: "Question2?",
-      text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse malesuada lacus ex, sit amet blandit leo lobortis eget."
+      title: "What is crowdfunding?",
+      text: "Is a kind of crowd financing with the purpose of obtain money or other resources for a project."
     },
     {
-      title: "Question3?",
-      text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse malesuada lacus ex, sit amet blandit leo lobortis eget."
+      title: "How can I be part?",
+      text: "You can join the Galaxia community by giving donations to a project as investor. You only need a Solana Phantom wallet."
     },
     {
-      title: "Question4?",
-      text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse malesuada lacus ex, sit amet blandit leo lobortis eget."
+      title: "How can I start a campaign?",
+      text: "You can contact us to be a enterpeneur at contact@galaxia.com."
+    },
+    {
+      title: "How much is the commission?",
+      text: "The commission per campaign is 5% of the amount raised. It's discounted when the campaing ends and before sending the ammount raised to the entrepreneur."
+    },
+    {
+      title: "Which currency uses?",
+      text: "The donations currency is SOL to patron porjects on Galaxia."
     },
   ];
 
@@ -84,14 +96,17 @@ function Landing() {
         </div>
         <div className='column c-short'>
           <Typography variant="h3" textTransform='uppercase'>
-            Get to know GALAXIA
+          FIND IT FIRST ON GALAXIA
           </Typography>
           <Typography>
-            Lorem ipsum dolor sit amet. Aut impedit nemo et quia perferendis eum atque sunt aut architecto magnam et quia incidunt et reiciendis galisum. Vel soluta ut aspernatur laboriosam ut minima ratione vel consequatur perferendis. Lorem ipsum dolor sit amet. Aut impedit nemo et quia perferendis eum atque sunt aut architecto magnam et quia incidunt et reiciendis galisum.
+          Galaxia is a crowdfunding platform for <strong>Solana</strong> projects. Find games, NFT collections, metaverses and more.
+          </Typography>
+          <Typography>
+          Galaxia will support innovative projects, avoiding the pressure of the current funding options' opening sells (IDO's and ICO's).
           </Typography>
         </div>
         <Typography variant="h6" align='center' fontWeight='bold'>
-          Lorem ipsum dolor sit amet. Aut impedit nemo et quia perferendis eum atque sunt
+          Become an early investor, be part of awesome projects and obtain rewards!
         </Typography>
       </div>
       {/* <Skeleton variant="rectangular" width={480} height={360} /> */}
@@ -120,6 +135,12 @@ function Landing() {
         </Step>
         ) })}
       </Stepper>
+      <br/>
+      <Typography align='center'>
+        With Galaxia you'll have the chance to support the next top projects of Solana network.
+        <br/>
+        Search projects, know their history, follow their development and lend your support to make it successfull.
+      </Typography>
     </section>
 
 
