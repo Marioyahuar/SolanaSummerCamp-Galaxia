@@ -5,8 +5,43 @@ import { Card, CardActionArea, CardContent, CardMedia, Chip, Divider, Stack, Typ
 import { faCheck, faClock, faEllipsis, faUserGroup } from '@fortawesome/free-solid-svg-icons'
 import moment from 'moment'
 import Progress from './Progress'
+import * as web3 from '@solana/web3.js'
+import { useConnection, useWallet } from '@solana/wallet-adapter-react'
+import { LAMPORTS_PER_SOL } from '@solana/web3.js'
+import * as buffer from "buffer";
 
 function ProjectCard( p: ProjectMin ) {
+  const [balance, setBalance] = React.useState(0)
+  const [patrons, setqPatrons] = React.useState(0)
+  const { connection } = useConnection()
+  //const { publicKey, sendTransaction } = useWallet()
+
+  React.useEffect(() => {
+    async function getSolBalance() {
+      const respuesta = await fetch(`http://localhost/obtenerProjectOwner.php?id=${p.id}`);
+      const owner = await respuesta.json();
+      console.log(owner.ProjectOwner)
+      const pkey = new web3.PublicKey(owner.ProjectOwner)
+      if (!connection || !pkey) { return }
+
+      connection.getAccountInfo(pkey).then(info => {
+          if(info !== null) setBalance((info.lamports/LAMPORTS_PER_SOL))
+      })
+    }
+    getSolBalance()
+}, [connection])
+
+  React.useEffect(() => {
+    async function getPatrocinadores(){
+      const respuesta = await fetch(`http://localhost/obtenerPatrocinadores.php?id=${p.id}`)
+      const patrons = await respuesta.json();
+      console.log(patrons)
+      const totalpatrons = patrons.length
+      setqPatrons(totalpatrons)
+    }
+    getPatrocinadores()
+  })
+
   return (
     <Card className='project-card'>
       <CardActionArea href={'/project/'+p.id}>
@@ -29,7 +64,7 @@ function ProjectCard( p: ProjectMin ) {
             </Typography>
           </div>
 
-          <Progress reached={p.solRaised} goal={p.solGoal} />
+          <Progress reached={parseFloat(balance.toFixed(2))} goal={p.solGoal} />
 
           <Stack
             direction="row"
@@ -46,7 +81,7 @@ function ProjectCard( p: ProjectMin ) {
             </span>
             <span className='row' key={2}>
               <FontAwesomeIcon icon={faUserGroup} />
-              <strong>{p.qPatrons}</strong>
+              <strong>{patrons}</strong>
               <small>patrons</small>
             </span>
           </Stack>

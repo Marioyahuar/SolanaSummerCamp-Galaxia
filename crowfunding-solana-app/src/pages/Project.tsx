@@ -61,6 +61,8 @@ interface fullProjectBD {
 function Project() {
   //id del proyecto
   const {id} = useParams();
+  const [balance, setBalance] = React.useState(0)
+  const [patrons, setqPatrons] = React.useState(0)
   //console.log("Project ID: " + id)
 
   let initializeProject : ProjectFull = {
@@ -149,6 +151,16 @@ function Project() {
     }
   }, [id])
   
+  React.useEffect(() => {
+    async function getPatrocinadores(){
+      const respuesta = await fetch(`http://localhost/obtenerPatrocinadores.php?id=${id}`)
+      const patrons = await respuesta.json();
+      console.log(patrons)
+      const totalpatrons = patrons.length
+      setqPatrons(totalpatrons)
+    }
+    getPatrocinadores()
+  })
 
   //TABS
   const [selectedTab, setSelectedTab] = React.useState(0);
@@ -205,7 +217,7 @@ function Project() {
         <div className='row'>
           <Typography component="span" className="row f-fill">
             <FontAwesomeIcon icon={faUserGroup} />
-            <strong>{project.qPatrons}</strong>
+            <strong>{patrons}</strong>
             patrons
           </Typography>
           <Button variant="contained" className='gradient' href='#support'

@@ -26,16 +26,21 @@ function Explore( p : { sponsoring: boolean } ) {
       solRaised: 0, //Leer desde smart contract
       solGoal: p.SolGoal,
       dateLimit: p.DateLimit,
-      qPatrons: 1, //Leer desde smart contract
+      qPatrons: 0, //Leer desde smart contract
     }});
     setProyectos(newProjects);
-    setFilteredProjects(newProjects);
+    if(!p.sponsoring) setFilteredProjects(newProjects);
   }
 
   async function getProjectIds(url:string){
     const respuesta = await fetch(url)
     const allids = await respuesta.json()
-    setProjectIds(allids.map((i:{ProjectId:number}) => i.ProjectId))
+    const ids = allids.map((i:{ProjectId:number}) => i.ProjectId)
+    //setProjectIds()
+    console.log(ids, proyectos,filteredProjects)
+    let newProjects: ProjectMin[] = proyectos.filter( p => {return ids.includes(p.id)} );
+    setProyectos(newProjects);
+    setFilteredProjects(newProjects);
     //console.log(projectIds)
   }
   //${publicKey.toString()}
@@ -48,10 +53,7 @@ function Explore( p : { sponsoring: boolean } ) {
       let user = publicKey.toString()
       if (p.sponsoring) {
         getProjectIds(`http://localhost/obtenerProyectosPatrocinados.php?user='${user}'`).then( ()=>{
-          console.log(projectIds,proyectos,filteredProjects)
-          let newProjects: ProjectMin[] = proyectos.filter( p => {return projectIds.includes(p.id)} );
-          setProyectos(newProjects);
-          setFilteredProjects(newProjects);
+          
         })
       }
       //obtenerProyectosPatrocinados.php?user=

@@ -19,11 +19,6 @@ function RewardCard( p: { projectId:number, reward?:Reward } ) {
 
   const [ state, setState ] = React.useState(states[0]);
 
-  const testF = () =>{ 
-    console.log("testing reward button")
-    console.log(p.projectId)
-  }
-
   const { connection } = useConnection()
   const { publicKey, sendTransaction } = useWallet()
 
@@ -36,7 +31,7 @@ function RewardCard( p: { projectId:number, reward?:Reward } ) {
       const owner = await respuesta.json();
       setAddressToSend(owner.ProjectOwner);
       //detectar si ya ha sido patrocinado por user. si lo es:
-      if (true) setState(states[2]);
+      if (false) setState(states[2]);
     }
     if ( p.projectId!== undefined ) {
       getProject();

@@ -45,6 +45,13 @@ function obtenerProyectosPatrocinados($user)
     return $sentencia->fetchAll();
 }
 
+function obtenerPatrocinadores($id){
+    $bd = obtenerConexion();
+    $sentencia = $bd->query("SELECT User FROM donations WHERE ProjectId= $id");
+    //$sentencia->execute([$user]);
+    return $sentencia->fetchAll();
+}
+
 function obtenerConexion()
 {
     $password = '';
