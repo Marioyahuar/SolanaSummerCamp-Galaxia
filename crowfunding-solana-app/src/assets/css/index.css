@@ -515,6 +515,15 @@ a .MuiChip-root {
 /*  */
 #faq > div {
   width: 50%;
+  gap: 0.5em;
+  align-items: stretch;
+}
+#faq .MuiAccordion-root.Mui-expanded {
+  margin: 0px;
+}
+#faq .MuiAccordionSummary-content.Mui-expanded {
+  min-height: 1.5em;
+  margin: 0.5em 0px;
 }
 
 

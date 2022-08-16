@@ -14,6 +14,9 @@ function Footer() {
       </Stack>
       <Stack>
         <Typography variant="h5">
+          Social media
+        </Typography>
+        <Typography component="span">
           <FontAwesomeIcon icon={faFacebook} /> /galaxia
         </Typography>
         <Typography component="span">
