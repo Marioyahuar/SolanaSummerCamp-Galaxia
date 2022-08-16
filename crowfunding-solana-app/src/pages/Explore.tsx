@@ -42,28 +42,21 @@ function Explore( p : { sponsoring: boolean } ) {
 
   React.useEffect(() => {
     //console.log(`hola${publicKey?.toString()}`)
+    getProjects(`http://localhost/obtenerProyectos.php`)
+
     if(publicKey !== null){
       let user = publicKey.toString()
-      getProjectIds(`http://localhost/obtenerProyectosPatrocinados.php?user='${user}'`)} //obtenerProyectosPatrocinados.php?user=
-      
-  }, [publicKey])
-
-  React.useEffect(() => {
-    if (!p.sponsoring) {
-      //console.log('explore');
-      getProjects(`http://localhost/obtenerProyectos.php`);
-    } else {
-      //console.log('sponsoring');
-      getProjects(`http://localhost/obtenerProyectos.php`)
-    } 
-    if (projectIds.length > 0){
-        console.log(projectIds,proyectos,filteredProjects)
-        let newProjects: ProjectMin[] = proyectos.filter( p => {return projectIds.includes(p.id)} );
-        setProyectos(newProjects);
-        setFilteredProjects(newProjects);
-    }
-
-  }, [p.sponsoring, projectIds])
+      if (p.sponsoring) {
+        getProjectIds(`http://localhost/obtenerProyectosPatrocinados.php?user='${user}'`).then( ()=>{
+          console.log(projectIds,proyectos,filteredProjects)
+          let newProjects: ProjectMin[] = proyectos.filter( p => {return projectIds.includes(p.id)} );
+          setProyectos(newProjects);
+          setFilteredProjects(newProjects);
+        })
+      }
+      //obtenerProyectosPatrocinados.php?user=
+    }   
+  }, [publicKey, p.sponsoring])
 
   const [selectedCat, setSelectedCat] = React.useState(0);
   let categories : string[] = [
