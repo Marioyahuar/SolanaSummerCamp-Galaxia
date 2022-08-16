@@ -35,7 +35,7 @@ function Explore( p : { sponsoring: boolean } ) {
   async function getProjectIds(url:string){
     const respuesta = await fetch(url)
     const allids = await respuesta.json()
-    setProjectIds(allids)
+    setProjectIds(allids.map((i:{ProjectId:number}) => i.ProjectId))
     //console.log(projectIds)
   }
   //${publicKey.toString()}
@@ -52,15 +52,17 @@ function Explore( p : { sponsoring: boolean } ) {
     if (!p.sponsoring) {
       //console.log('explore');
       getProjects(`http://localhost/obtenerProyectos.php`);
-    } else if (projectIds.length > 0) {
+    } else {
       //console.log('sponsoring');
-      getProjects(`http://localhost/obtenerProyectos.php`);
-      // El filter es innecesario si se llama al php correcto
-      console.log(projectIds)
-      let newProjects: ProjectMin[] = proyectos.filter( p => projectIds.includes(p.id) );
-      //setProyectos(newProjects);
-      setFilteredProjects(newProjects);
+      getProjects(`http://localhost/obtenerProyectos.php`)
+    } 
+    if (projectIds.length > 0){
+        console.log(projectIds,proyectos,filteredProjects)
+        let newProjects: ProjectMin[] = proyectos.filter( p => {return projectIds.includes(p.id)} );
+        setProyectos(newProjects);
+        setFilteredProjects(newProjects);
     }
+
   }, [p.sponsoring, projectIds])
 
   const [selectedCat, setSelectedCat] = React.useState(0);
