@@ -9,7 +9,8 @@
         "Lorem ipsum dolor sit amet."
       ],
       "estimatedDeliverDate": "new Date('2022-11-25')",
-      "patronsQuantity": "45"
+      "patronsQuantity": "45",
+      "stock": "5"
     }
 ]
 

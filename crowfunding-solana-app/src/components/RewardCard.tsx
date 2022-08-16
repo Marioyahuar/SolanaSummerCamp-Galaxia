@@ -30,13 +30,25 @@ function RewardCard( p: { projectId:number, reward?:Reward } ) {
       const respuesta = await fetch(`http://localhost/obtenerProjectOwner.php?id=${p.projectId}`);
       const owner = await respuesta.json();
       setAddressToSend(owner.ProjectOwner);
-      //detectar si ya ha sido patrocinado por user. si lo es:
-      if (false) setState(states[2]);
     }
     if ( p.projectId!== undefined ) {
       getProject();
     }
   }, [p.projectId])
+
+  React.useEffect(() => {
+    async function getAlreadySponsored() {
+      if(publicKey !== null && p.reward!== undefined){
+        let user = publicKey.toString()
+      const respuesta = await fetch(`http://localhost/verificarReward.php?pId=${p.projectId}&rId=${p.reward?.id}&user='${user}'`);
+      const sponsored = await respuesta.json();
+      //console.log(sponsored)
+      //detectar si ya ha sido patrocinado por user. si lo es:
+      if (sponsored.length > 0) setState(states[2]);
+      }
+    }
+    getAlreadySponsored()
+  })
 
   function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
     const value = event.target.value
@@ -44,34 +56,43 @@ function RewardCard( p: { projectId:number, reward?:Reward } ) {
   }
 
   const sendSol = (event: React.SyntheticEvent) => {
+    console.log(p.reward?.id)
     event.preventDefault()
     if (!connection || !publicKey) {
       alert('To support, a wallet is needed.');
       return
     }
     setState(states[1]);
+    //setAmountToSend(p.reward ? p.reward.minPrice : 0)
+    let amount = 0
+    if(p.reward === undefined){
+      amount = amountToSend
+    } else {
+      amount = p.reward? p.reward.minPrice : 0
+    }
+    
     const transaction = new web3.Transaction()
     const recipientPubKey = new web3.PublicKey(addresToSend)
 
     const sendSolInstruction = web3.SystemProgram.transfer({
         fromPubkey: publicKey,
         toPubkey: recipientPubKey,
-        lamports: LAMPORTS_PER_SOL * amountToSend
+        lamports: LAMPORTS_PER_SOL * amount
     })
 
     transaction.add(sendSolInstruction);
     sendTransaction(transaction, connection).then(sig => {
         console.log(sig)
-        if(p.reward !== undefined){
+        //if(p.reward !== undefined){
           const newDonation = {
             User: publicKey.toString(),
             TxHash: sig.toString(),
             ProjectId: p.projectId,
-            RewardId: p.reward.id
-          }
+            RewardId: p.reward? p.reward.id : null}
+          //}
           sendDonation(newDonation)
         }
-    })
+    )
   }
   
   const sendDonation = async (input: any) => {

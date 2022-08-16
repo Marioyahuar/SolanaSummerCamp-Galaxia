@@ -20,7 +20,7 @@ function ProjectCard( p: ProjectMin ) {
     async function getSolBalance() {
       const respuesta = await fetch(`http://localhost/obtenerProjectOwner.php?id=${p.id}`);
       const owner = await respuesta.json();
-      console.log(owner.ProjectOwner)
+      //console.log(owner.ProjectOwner)
       const pkey = new web3.PublicKey(owner.ProjectOwner)
       if (!connection || !pkey) { return }
 
@@ -35,7 +35,7 @@ function ProjectCard( p: ProjectMin ) {
     async function getPatrocinadores(){
       const respuesta = await fetch(`http://localhost/obtenerPatrocinadores.php?id=${p.id}`)
       const patrons = await respuesta.json();
-      console.log(patrons)
+      //console.log(patrons)
       const totalpatrons = patrons.length
       setqPatrons(totalpatrons)
     }

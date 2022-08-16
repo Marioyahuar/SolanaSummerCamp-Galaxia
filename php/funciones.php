@@ -52,6 +52,13 @@ function obtenerPatrocinadores($id){
     return $sentencia->fetchAll();
 }
 
+function verificarReward($pId,$rId,$user){
+    $bd = obtenerConexion();
+    $sentencia = $bd->query("SELECT `ID` FROM `donations` WHERE (`User`=$user && `ProjectId`=$pId && `RewardId`=$rId)");
+    //$sentencia->execute([$user]);
+    return $sentencia->fetchAll();
+}
+
 function obtenerConexion()
 {
     $password = '';

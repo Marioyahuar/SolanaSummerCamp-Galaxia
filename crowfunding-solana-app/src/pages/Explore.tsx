@@ -46,7 +46,6 @@ function Explore( p : { sponsoring: boolean } ) {
   //${publicKey.toString()}
 
   React.useEffect(() => {
-    //console.log(`hola${publicKey?.toString()}`)
     getProjects(`http://localhost/obtenerProyectos.php`)
 
     if(publicKey !== null){
@@ -56,7 +55,6 @@ function Explore( p : { sponsoring: boolean } ) {
           
         })
       }
-      //obtenerProyectosPatrocinados.php?user=
     }   
   }, [publicKey, p.sponsoring])
 

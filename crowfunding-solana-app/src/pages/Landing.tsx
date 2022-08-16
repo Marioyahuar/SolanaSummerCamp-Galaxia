@@ -77,7 +77,7 @@ function Landing() {
     },
     {
       title: "Which currency uses?",
-      text: "The donations currency is SOL to patron porjects on Galaxia."
+      text: "The donations currency is SOL to patron projects on Galaxia."
     },
   ];
 
@@ -139,7 +139,7 @@ function Landing() {
       <Typography align='center'>
         With Galaxia you'll have the chance to support the next top projects of Solana network.
         <br/>
-        Search projects, know their history, follow their development and lend your support to make it successfull.
+        Search projects, know their history, follow their development and lend your support to make it successful.
       </Typography>
     </section>
 

@@ -9,6 +9,9 @@ import Progress from '../components/Progress';
 import { faCheck, faUserGroup } from '@fortawesome/free-solid-svg-icons';
 import Timer from '../components/Timer';
 import RewardCard from '../components/RewardCard';
+import * as web3 from '@solana/web3.js'
+import { useConnection, useWallet } from '@solana/wallet-adapter-react'
+import { LAMPORTS_PER_SOL } from '@solana/web3.js'
 
 // TAB PANEL CONTROL START
 interface TabPanelProps {
@@ -63,6 +66,7 @@ function Project() {
   const {id} = useParams();
   const [balance, setBalance] = React.useState(0)
   const [patrons, setqPatrons] = React.useState(0)
+  const { connection } = useConnection()
   //console.log("Project ID: " + id)
 
   let initializeProject : ProjectFull = {
@@ -103,7 +107,7 @@ function Project() {
       {
         id: 0,
         name: 'Reward1',
-        minPrice: 150,
+        minPrice: 0,
         description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Rutrum lectus dictum risus enim egestas.',
         perksIncluded: [
           'Lorem ipsum dolor sit amet.'
@@ -116,6 +120,7 @@ function Project() {
 
   const [project, setProject] = React.useState(initializeProject);
   
+  //GetProject
   React.useEffect(() => {
     async function getProject() {
       const respuesta = await fetch(`http://localhost/obtenerProyectoPorID.php?id=${id}`);
@@ -151,16 +156,33 @@ function Project() {
     }
   }, [id])
   
+  //GetPatrons
   React.useEffect(() => {
     async function getPatrocinadores(){
       const respuesta = await fetch(`http://localhost/obtenerPatrocinadores.php?id=${id}`)
       const patrons = await respuesta.json();
-      console.log(patrons)
+      //console.log(patrons)
       const totalpatrons = patrons.length
       setqPatrons(totalpatrons)
     }
     getPatrocinadores()
   })
+
+  //GetBalance
+  React.useEffect(() => {
+    async function getSolBalance() {
+      const respuesta = await fetch(`http://localhost/obtenerProjectOwner.php?id=${id}`);
+      const owner = await respuesta.json();
+      //console.log(owner.ProjectOwner)
+      const pkey = new web3.PublicKey(owner.ProjectOwner)
+      if (!connection || !pkey) { return }
+
+      connection.getAccountInfo(pkey).then(info => {
+          if(info !== null) setBalance((info.lamports/LAMPORTS_PER_SOL))
+      })
+    }
+    getSolBalance()
+}, [connection])
 
   //TABS
   const [selectedTab, setSelectedTab] = React.useState(0);
@@ -210,7 +232,7 @@ function Project() {
           }
         </div>
 
-        <Progress reached={project.solRaised} goal={project.solGoal} />
+        <Progress reached={parseFloat(balance.toFixed(2))} goal={project.solGoal} />
 
         <Timer dateLimit={project.dateLimit}/>
 
