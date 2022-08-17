@@ -75,9 +75,10 @@ function ProjectCard( p: ProjectMin ) {
             <span className='row' key={1}>
               <FontAwesomeIcon icon={faClock} />
               <strong>
-                { moment(p.dateLimit).diff(moment(), 'days') }
+                { moment(p.dateLimit).diff(moment(), 'days') > 0 ? 
+                <>{moment(p.dateLimit).diff(moment(), 'days')} <small>days left</small></>
+                : "Closed" }
               </strong>
-              <small>days left</small>
             </span>
             <span className='row' key={2}>
               <FontAwesomeIcon icon={faUserGroup} />

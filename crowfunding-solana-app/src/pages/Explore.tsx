@@ -21,7 +21,7 @@ function Explore( p : { sponsoring: boolean } ) {
       id: p.ID,
       category: p.Category,
       name: p.ProjectName,
-      description: "First Description",
+      description: p.Description,
       images: undefined,
       solRaised: 0, //Leer desde smart contract
       solGoal: p.SolGoal,
@@ -29,33 +29,19 @@ function Explore( p : { sponsoring: boolean } ) {
       qPatrons: 0, //Leer desde smart contract
     }});
     setProyectos(newProjects);
-    if(!p.sponsoring) setFilteredProjects(newProjects);
-  }
-
-  async function getProjectIds(url:string){
-    const respuesta = await fetch(url)
-    const allids = await respuesta.json()
-    const ids = allids.map((i:{ProjectId:number}) => i.ProjectId)
-    //setProjectIds()
-    console.log(ids, proyectos,filteredProjects)
-    let newProjects: ProjectMin[] = proyectos.filter( p => {return ids.includes(p.id)} );
-    setProyectos(newProjects);
     setFilteredProjects(newProjects);
-    //console.log(projectIds)
   }
-  //${publicKey.toString()}
 
   React.useEffect(() => {
-    getProjects(`http://localhost/obtenerProyectos.php`)
-
-    if(publicKey !== null){
-      let user = publicKey.toString()
-      if (p.sponsoring) {
-        getProjectIds(`http://localhost/obtenerProyectosPatrocinados.php?user='${user}'`).then( ()=>{
-          
-        })
+    if(p.sponsoring){
+      if(publicKey !== null){
+        let user = publicKey.toString()
+        getProjects(`http://localhost/obtenerProyectosPatrocinados.php?user='${user}'`)
       }
-    }   
+    }
+    else{
+      getProjects(`http://localhost/obtenerProyectos.php`)
+    } 
   }, [publicKey, p.sponsoring])
 
   const [selectedCat, setSelectedCat] = React.useState(0);

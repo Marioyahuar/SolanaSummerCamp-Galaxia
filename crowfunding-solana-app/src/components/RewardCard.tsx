@@ -9,13 +9,21 @@ import { useConnection, useWallet } from '@solana/wallet-adapter-react'
 import { LAMPORTS_PER_SOL } from '@solana/web3.js'
 import * as buffer from "buffer";
 
+interface donation {
+  DonationID: number,
+  ProjectId: number,
+  RewardId: number,
+  TxHash: string,
+  User: string
+}
+
 const states = [
   {label:'Patron', icon: faCheck },
   {label:'Connecting...', icon: faSpinner },
   {label:'Patronized', icon: faCheck }
 ]
 
-function RewardCard( p: { projectId:number, reward?:Reward } ) {
+function RewardCard( p: { projectId:number, reward?:Reward, active:boolean } ) {
 
   const [ state, setState ] = React.useState(states[0]);
 
@@ -40,11 +48,14 @@ function RewardCard( p: { projectId:number, reward?:Reward } ) {
     async function getAlreadySponsored() {
       if(publicKey !== null && p.reward!== undefined){
         let user = publicKey.toString()
-      const respuesta = await fetch(`http://localhost/verificarReward.php?pId=${p.projectId}&rId=${p.reward?.id}&user='${user}'`);
-      const sponsored = await respuesta.json();
-      //console.log(sponsored)
-      //detectar si ya ha sido patrocinado por user. si lo es:
-      if (sponsored.length > 0) setState(states[2]);
+        const respuesta = await fetch(`http://localhost/obtenerPatrocinadoresPorReward.php?pId=${p.projectId}&rId=${p.reward?.id}`);
+        const sponsored:donation[] = await respuesta.json(); 
+        console.log(sponsored,p.reward.id)
+        p.reward.patronsQuantity = sponsored.length;
+        let lookIfUserIsSponsor = sponsored.filter(donation => donation.User === user)
+        //console.log("Length", lookIfUserIsSponsor, lookIfUserIsSponsor.length)
+      //detectar si ya ha sido patrocinado por user. si lo es
+        if (lookIfUserIsSponsor.length > 0) setState(states[2]);
       }
     }
     getAlreadySponsored()
@@ -82,7 +93,7 @@ function RewardCard( p: { projectId:number, reward?:Reward } ) {
 
     transaction.add(sendSolInstruction);
     sendTransaction(transaction, connection).then(sig => {
-        console.log(sig)
+        console.log("Hola: ",sig)
         //if(p.reward !== undefined){
           const newDonation = {
             User: publicKey.toString(),
@@ -92,7 +103,7 @@ function RewardCard( p: { projectId:number, reward?:Reward } ) {
           //}
           sendDonation(newDonation)
         }
-    )
+    ).catch(error => setState(states[0]))
   }
   
   const sendDonation = async (input: any) => {
@@ -151,6 +162,7 @@ function RewardCard( p: { projectId:number, reward?:Reward } ) {
         direction="row"
         justifyContent="space-between"
         alignItems="flex-end"
+        flexWrap="wrap"
         spacing={1}
       >
         <div>
@@ -170,7 +182,7 @@ function RewardCard( p: { projectId:number, reward?:Reward } ) {
         </>
         :
         <Button variant="contained" className={'f-fill'}
-          onClick={sendSol} disabled={state === states[2]}
+          onClick={sendSol} disabled={state === states[2]||!p.active}
           startIcon={<FontAwesomeIcon icon={state.icon} />}>
           {state.label}
         </Button>
@@ -192,6 +204,7 @@ function RewardCard( p: { projectId:number, reward?:Reward } ) {
       direction="row"
       justifyContent="space-between"
       alignItems="center"
+      flexWrap="wrap"
       spacing={1}
     >
       <TextField variant="filled"
@@ -206,6 +219,7 @@ function RewardCard( p: { projectId:number, reward?:Reward } ) {
         }}/>
 
       <Button variant="contained" className='f-fill' onClick={sendSol}
+        disabled={!p.active}
         startIcon={<FontAwesomeIcon icon={state.icon} />}>
         {state.label}
       </Button>

@@ -19,7 +19,7 @@ function obtenerProjectOwnerPorId($id)
 function obtenerProyectos() //Arg = ID's a recuperar
 {   //La función debe devolver solo los proyectos que coincidan con los ID's 
     $bd = obtenerConexion();
-    $sentencia = $bd->query("SELECT ID, Category, ProjectName, SolGoal, DateLimit FROM projects1");
+    $sentencia = $bd->query("SELECT ID, Category, ProjectName, Description, SolGoal, DateLimit FROM projects1 WHERE DATEDIFF(CURDATE(),DateLimit)<=0");
     return $sentencia->fetchAll();
 }
 
@@ -32,7 +32,7 @@ function crearNuevoPatrocinio($donation){
 function obtenerUltimosProyectos($limite)
 {
     $bd = obtenerConexion();
-    $sentencia = $bd->query("SELECT * FROM projects1 ORDER by DateLimit ASC LIMIT $limite");
+    $sentencia = $bd->query("SELECT * FROM projects1 WHERE DATEDIFF(CURDATE(),DateLimit)<=0  ORDER by DateLimit ASC LIMIT $limite");
     //$sentencia-> execute([$limite]);
     return $sentencia->fetchAll();
 }
@@ -40,7 +40,7 @@ function obtenerUltimosProyectos($limite)
 function obtenerProyectosPatrocinados($user)
 {
     $bd = obtenerConexion();
-    $sentencia = $bd->query("SELECT ProjectId FROM donations WHERE User= $user");
+    $sentencia = $bd->query("SELECT * FROM projects1 inner join donations on projects1.ID= donations.ProjectId WHERE donations.User=$user");
     //$sentencia->execute([$user]);
     return $sentencia->fetchAll();
 }
@@ -54,10 +54,17 @@ function obtenerPatrocinadores($id){
 
 function verificarReward($pId,$rId,$user){
     $bd = obtenerConexion();
-    $sentencia = $bd->query("SELECT `ID` FROM `donations` WHERE (`User`=$user && `ProjectId`=$pId && `RewardId`=$rId)");
+    $sentencia = $bd->query("SELECT `DonationID` FROM `donations` WHERE (`User`=$user && `ProjectId`=$pId && `RewardId`=$rId)");
     //$sentencia->execute([$user]);
     return $sentencia->fetchAll();
 }
+
+function obtenerPatrocinadoresPorReward($pId,$rId){
+    $bd = obtenerConexion();
+    $sentencia = $bd->query("SELECT * FROM donations WHERE ProjectId=$pId AND RewardId=$rId");
+    return $sentencia->fetchAll();
+}
+
 
 function obtenerConexion()
 {

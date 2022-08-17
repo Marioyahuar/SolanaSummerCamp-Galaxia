@@ -3,6 +3,7 @@ import { Reward } from "./Reward";
 interface ProjectBD {
   ID: number,
   Category?: string,
+  Description: string,
   ProjectName: string,
   SolGoal: number,
   DateLimit: Date
