@@ -159,7 +159,7 @@ function Landing() {
 
 
     <section id="faq" className='row cols-2'>
-      <img src="images/question_closing.svg" alt="closing question sign" />
+      <img src="images/faq.png" alt="closing question sign" />
       <div className='column'>
         <Typography variant='h2' align='center' paddingBottom='1em'>
           FAQ
