@@ -19,7 +19,7 @@ function obtenerProjectOwnerPorId($id)
 function obtenerProyectos() //Arg = ID's a recuperar
 {   //La función debe devolver solo los proyectos que coincidan con los ID's 
     $bd = obtenerConexion();
-    $sentencia = $bd->query("SELECT ID, Category, ProjectName, Description, SolGoal, DateLimit FROM projects1 WHERE DATEDIFF(CURDATE(),DateLimit)<=0");
+    $sentencia = $bd->query("SELECT ID, Category, ProjectName, Description, SolGoal, DateLimit FROM projects1 WHERE TIMEDIFF(CURRENT_TIMESTAMP(),DateLimit)<=0");
     return $sentencia->fetchAll();
 }
 
@@ -32,7 +32,7 @@ function crearNuevoPatrocinio($donation){
 function obtenerUltimosProyectos($limite)
 {
     $bd = obtenerConexion();
-    $sentencia = $bd->query("SELECT * FROM projects1 WHERE DATEDIFF(CURDATE(),DateLimit)<=0  ORDER by DateLimit ASC LIMIT $limite");
+    $sentencia = $bd->query("SELECT * FROM projects1 WHERE TIMEDIFF(CURRENT_TIMESTAMP(),DateLimit)<=0  ORDER by DateLimit ASC LIMIT $limite");
     //$sentencia-> execute([$limite]);
     return $sentencia->fetchAll();
 }

@@ -113,8 +113,7 @@ function Project() {
         perksIncluded: [
           'Lorem ipsum dolor sit amet.'
         ],
-        estimatedDeliverDate: new Date('2022-11-25'),
-        patronsQuantity: 45
+        estimatedDeliverDate: new Date('2022-11-25')
       }
     ]
   };
@@ -301,9 +300,9 @@ function Project() {
 
       <Grid item lg={3} md={6} sm={8} id="support" component="aside" className='column'>
         <Typography variant="caption">SUPPORT</Typography>
-        <RewardCard projectId={parseInt(id??'') ?? 0} key={0} active={moment(project.dateLimit).diff(moment(), 'days') > 0}/>
+        <RewardCard projectId={parseInt(id??'') ?? 0} key={0} active={moment(project.dateLimit).diff(moment(), 'seconds') > 0}/>
         { project.rewards?.map((r, i)=>
-        <RewardCard projectId={parseInt(id??'') ?? 0} reward={r} key={i+1} active={moment(project.dateLimit).diff(moment(), 'days') > 0}/>
+        <RewardCard projectId={parseInt(id??'') ?? 0} reward={r} key={i+1} active={moment(project.dateLimit).diff(moment(), 'seconds') > 0}/>
         ) }
       </Grid>
 

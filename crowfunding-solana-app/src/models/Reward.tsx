@@ -5,7 +5,6 @@ interface Reward {
   description: string,
   perksIncluded: string[],
   estimatedDeliverDate: Date,
-  patronsQuantity: number,
   stock?: number,
 }
 

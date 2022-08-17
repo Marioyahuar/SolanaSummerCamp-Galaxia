@@ -26,7 +26,7 @@ const states = [
 function RewardCard( p: { projectId:number, reward?:Reward, active:boolean } ) {
 
   const [ state, setState ] = React.useState(states[0]);
-
+  const [ qpatrons, setQpatrons] = React.useState(0);
   const { connection } = useConnection()
   const { publicKey, sendTransaction } = useWallet()
 
@@ -46,17 +46,17 @@ function RewardCard( p: { projectId:number, reward?:Reward, active:boolean } ) {
 
   React.useEffect(() => {
     async function getAlreadySponsored() {
-      if(publicKey !== null && p.reward!== undefined){
-        let user = publicKey.toString()
+      if(p.reward!== undefined){
         const respuesta = await fetch(`http://localhost/obtenerPatrocinadoresPorReward.php?pId=${p.projectId}&rId=${p.reward?.id}`);
         const sponsored:donation[] = await respuesta.json(); 
-        console.log(sponsored,p.reward.id)
-        p.reward.patronsQuantity = sponsored.length;
-        let lookIfUserIsSponsor = sponsored.filter(donation => donation.User === user)
-        //console.log("Length", lookIfUserIsSponsor, lookIfUserIsSponsor.length)
-      //detectar si ya ha sido patrocinado por user. si lo es
-        if (lookIfUserIsSponsor.length > 0) setState(states[2]);
-      }
+        setQpatrons(sponsored.length)
+        if(publicKey !== null){
+          let user = publicKey.toString()
+          let lookIfUserIsSponsor = sponsored.filter(donation => donation.User === user)
+          //detectar si ya ha sido patrocinado por user. si lo es
+          if (lookIfUserIsSponsor.length > 0) setState(states[2]);
+        } 
+      }  
     }
     getAlreadySponsored()
   })
@@ -168,9 +168,9 @@ function RewardCard( p: { projectId:number, reward?:Reward, active:boolean } ) {
         <div>
           <Typography component="span" className="row f-fill">
             <FontAwesomeIcon icon={faUserGroup} />
-            {p.reward.patronsQuantity}
+            {qpatrons}
             <Chip label={p.reward.stock ?
-              (p.reward.stock - p.reward.patronsQuantity) + ' left'
+              (p.reward.stock - qpatrons) + ' left'
               : ' Unlimited'
             } />
           </Typography>
