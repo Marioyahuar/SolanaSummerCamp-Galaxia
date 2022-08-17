@@ -1,5 +1,5 @@
 # Instalation
-* yarn install
+* yarn install or npm install
 * Router:
   * yarn add react-router-dom
   * yarn add @types/react-router-dom
